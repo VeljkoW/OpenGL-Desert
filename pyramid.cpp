@@ -17,11 +17,10 @@ Pyramid::Pyramid(const std::string& texturePath, float baseWidth, float height, 
         baseWidth / 2.0f,    0.0f,   0.0f,    1.0f, 0.0f,  // Bottom-right
         0.0f,               height,   0.0f,    0.5f, 1.0f   // Top (apex)
     };
-
-    // Apply translation to vertices based on position offsets
+    
     for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 5) {
-        vertices[i] += xPos;  // Translate x
-        vertices[i + 1] += yPos;  // Translate y
+        vertices[i] += xPos; 
+        vertices[i + 1] += yPos;  
     }
 
 
@@ -34,7 +33,7 @@ Pyramid::Pyramid(const std::string& texturePath, float baseWidth, float height, 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // Position attribute (x, y, z)
+    // Position attribute (x, y)
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 

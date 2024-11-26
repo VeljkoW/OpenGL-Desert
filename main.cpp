@@ -65,9 +65,9 @@ int main(void)
 
     Sand sand("sand.jpg");
 
-    Pyramid pyramid1("brick.jpg", 0.35f, 0.4f, 0.5f, -0.1f);  // First pyramid: Position it left and below horizon
-    Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);   // Second pyramid: Centered, but below horizon
-    Pyramid pyramid3("brick.jpg", 0.27f, 0.3f, 0.46f, -0.5f); // Third pyramid: Positioned left and lower
+    Pyramid pyramid1("brick.jpg", 0.35f, 0.4f, 0.5f, -0.1f);
+    Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);  
+    Pyramid pyramid3("brick.jpg", 0.27f, 0.3f, 0.46f, -0.5f); 
 
 
     
@@ -78,7 +78,7 @@ int main(void)
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
+        glClearColor(0.0f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         sand.render();
