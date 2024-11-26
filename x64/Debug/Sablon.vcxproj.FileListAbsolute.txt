@@ -1,4 +1,0 @@
-C:\Users\Bogdan\Downloads\RG Trougao Sablon (1)\Sablon\x64\Debug\glew32.dll
-C:\Users\Bogdan\Downloads\RG Trougao Sablon (1)\Sablon\x64\Debug\Sablon.exe
-C:\Users\veljk\OneDrive\Desktop\Desert\x64\Debug\glew32.dll
-C:\Users\veljk\OneDrive\Desktop\Desert\x64\Debug\Sablon.exe
