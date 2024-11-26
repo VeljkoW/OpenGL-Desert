@@ -7,6 +7,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 #include "sand.h"
+#include "pyramid.h"
 
 int main(void)
 {
@@ -64,6 +65,11 @@ int main(void)
 
     Sand sand("sand.jpg");
 
+    Pyramid pyramid1("brick.jpg", 0.35f, 0.4f, 0.5f, -0.1f);
+    Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);  
+    Pyramid pyramid3("brick.jpg", 0.27f, 0.3f, 0.46f, -0.5f); 
+
+
     
     while (!glfwWindowShouldClose(window)) 
     {
@@ -72,10 +78,14 @@ int main(void)
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        glClearColor(0.2f, 0.3f, 0.3f, 1.0f); 
+        glClearColor(0.0f, 0.6f, 1.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         sand.render();
+
+        pyramid1.render();
+        pyramid2.render();
+        pyramid3.render();
 
 
         glfwSwapBuffers(window);
