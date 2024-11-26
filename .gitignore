@@ -30,3 +30,18 @@
 *.exe
 *.out
 *.app
+
+# Ignore Visual Studio files
+.vs/
+.vscode/
+# User-specific files
+*.user
+*.userosscache
+*.suo
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+# Other temporary files
+Thumbs.db
+Desktop.ini
