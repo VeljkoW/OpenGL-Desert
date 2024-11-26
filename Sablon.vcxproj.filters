@@ -24,6 +24,9 @@
     <ClCompile Include="sand.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pyramid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -41,9 +44,15 @@
     <ClInclude Include="sand.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="pyramid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="sand.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\brick.jpg">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

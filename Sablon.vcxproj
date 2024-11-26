@@ -142,6 +142,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="sand.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -150,10 +151,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="pyramid.h" />
     <ClInclude Include="sand.h" />
     <ClInclude Include="stb_image.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="..\brick.jpg" />
     <Image Include="sand.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
