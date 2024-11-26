@@ -8,6 +8,9 @@
 #include "stb_image.h"
 #include "sand.h"
 #include "pyramid.h"
+#include "sun.h"
+
+float calculateDeltaTime();
 
 int main(void)
 {
@@ -69,17 +72,25 @@ int main(void)
     Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);  
     Pyramid pyramid3("brick.jpg", 0.27f, 0.3f, 0.46f, -0.5f); 
 
+    Sun sun(0.0f, 0.6f);
 
-    
+    float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
+
     while (!glfwWindowShouldClose(window)) 
     {
+        float deltaTime = calculateDeltaTime();
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
         glClearColor(0.0f, 0.6f, 1.0f, 1.0f);
+
+        sun.update(deltaTime,aspectRatio);
+
         glClear(GL_COLOR_BUFFER_BIT);
+
+        sun.render();
 
         sand.render();
 
@@ -94,4 +105,12 @@ int main(void)
 
     glfwTerminate();
     return 0;
+}
+
+float calculateDeltaTime() {
+    static float lastFrameTime = 0.0f; // Time of the last frame
+    float currentFrameTime = glfwGetTime(); // Get the current time
+    float deltaTime = currentFrameTime - lastFrameTime; // Calculate the elapsed time
+    lastFrameTime = currentFrameTime; // Update the last frame time
+    return deltaTime; // Return the time difference
 }
