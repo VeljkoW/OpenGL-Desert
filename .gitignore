@@ -45,3 +45,9 @@
 # Other temporary files
 Thumbs.db
 Desktop.ini
+# Ignore build output directories (e.g., Debug, Release)
+x64/
+Debug/
+Release/
+# Ignore NuGet packages
+packages/
