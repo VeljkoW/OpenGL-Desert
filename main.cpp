@@ -9,6 +9,7 @@
 #include "sand.h"
 #include "pyramid.h"
 #include "sun.h"
+#include "moon.h"
 
 float calculateDeltaTime();
 
@@ -72,25 +73,69 @@ int main(void)
     Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);  
     Pyramid pyramid3("brick.jpg", 0.27f, 0.3f, 0.46f, -0.5f); 
 
+    bool isDay = true;
+    float skyR = 0.0f, skyG = 0.6f, skyB = 1.0f;    //The color of the sky in the beggining
+
     Sun sun(0.0f, 0.6f);
+    Moon moon(1.0f + 0.1f, 0.6f);
 
     float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
 
     while (!glfwWindowShouldClose(window)) 
     {
         float deltaTime = calculateDeltaTime();
+        if (isDay) {
+            sun.update(deltaTime, aspectRatio,isDay);
+            // Transition the sky color from bright blue to darker as sun sets
+            skyR = std::max(0.0f, skyR - 0.001f);
+            skyG = std::min(0.6f, skyG + 0.001f);
+            skyB = std::min(1.0f, skyB + 0.001f);
+            // When the sun goes off the left side, switch to night
+            if (sun.getPosX() < -1.0f - sun.getRadius())
+            {
+                isDay = false; // It's now night
+                moon.setPosX(1.0f + moon.getRadius()); // Start the moon from the right
+                moon.update(deltaTime, aspectRatio, isDay);
+            }
+        }
+        else {
+            moon.update(deltaTime, aspectRatio, isDay);
+            // Transition the sky color from bright blue to dark blue/black during the night
+            skyR = std::max(0.0f, skyR - 0.001f);
+            skyG = std::max(0.0f, skyG - 0.001f);
+            skyB = std::max(0.0f, skyB - 0.001f);
+
+            // When the moon goes off the left side, switch to day
+            if (moon.getPosX() < -1.0f - moon.getRadius()) {
+                isDay = true; // It's now day
+                sun.setPosX(1.0f + sun.getRadius()); // Start the sun from the right
+            }
+        }
+        //std::cout << "Sky Color: " << skyR << ", " << skyG << ", " << skyB << std::endl;
+
+        // Ensure the sky color values stay within bounds (0 to 1)
+        if (skyR < 0.0f) skyR = 0.0f;
+        if (skyR > 1.0f) skyR = 1.0f;
+        if (skyG < 0.0f) skyG = 0.0f;
+        if (skyG > 1.0f) skyG = 1.0f;
+        if (skyB < 0.0f) skyB = 0.0f;
+        if (skyB > 1.0f) skyB = 1.0f;
+
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
 
-        glClearColor(0.0f, 0.6f, 1.0f, 1.0f);
-
-        sun.update(deltaTime,aspectRatio);
-
+        glClearColor(skyR, skyG, skyB, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        sun.render();
+        if (isDay) 
+        {
+            sun.render();
+        }
+        else {
+            moon.render();
+        }
 
         sand.render();
 

@@ -29,12 +29,12 @@ Sun::Sun(float startPosX, float startPosY) : posX(startPosX), posY(startPosY), s
     glBindVertexArray(0);
 }
 
-void Sun::update(float deltaTime, float aspectRatio)
+void Sun::update(float deltaTime, float aspectRatio,bool isDay)
 {
     posX -= speed * deltaTime; // Move the sun to the left
 
     // Reset position when it goes off-screen
-    if (posX < -1.0f - radius) {
+    if (posX < -1.0f - radius && !isDay) {
         posX = 1.0f + radius; // Re-enter from the right side
     }
 
@@ -148,4 +148,19 @@ void Sun::createAndLoadShader()
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+}
+float Sun::getPosX() const {
+    return posX;
+}
+float Sun::getPosY() const {
+    return posY;
+}
+float Sun::getRadius() const {
+    return radius;
+}
+void Sun::setPosX(float x) {
+    posX = x;
+}
+void Sun::setPosY(float y) {
+    posY = y;
 }

@@ -12,15 +12,19 @@
 class Sun {
 	public:
 		Sun(float startPosX, float startPosY);
-		void update(float deltaTime,float aspectRatio);
+		void update(float deltaTime,float aspectRatio, bool isDay);
 		void render();
-		float posX, posY;
+		float getPosX() const;
+		float getPosY() const;
+		float getRadius() const;
+		void setPosX(float x);
+		void setPosY(float y);
 	private:
 		GLuint VAO, VBO;
 		float speed;
 		int numSegments;
-		float radius;
 		std::vector<GLfloat> vertices;
+		float posX, posY, radius;
 
 		GLuint shader;
 		void createAndLoadShader();
