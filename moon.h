@@ -7,6 +7,7 @@
 class Moon {
     public:
         Moon(float startPosX, float startPosY);
+        ~Moon();
         void update(float deltaTime, float aspectRatio,bool isDay);
         void render();
         float getPosX() const;

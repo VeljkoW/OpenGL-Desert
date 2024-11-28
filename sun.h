@@ -12,6 +12,7 @@
 class Sun {
 	public:
 		Sun(float startPosX, float startPosY);
+		~Sun();
 		void update(float deltaTime,float aspectRatio, bool isDay);
 		void render();
 		float getPosX() const;

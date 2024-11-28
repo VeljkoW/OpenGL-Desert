@@ -21,6 +21,12 @@ Moon::Moon(float startPosX, float startPosY)
     glEnableVertexAttribArray(1);
     glBindVertexArray(0);
 }
+Moon::~Moon()
+{
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shader);
+}
 
 void Moon::update(float deltaTime, float aspectRatio, bool isDay) {
     posX -= speed * deltaTime; // Move the moon to the right
@@ -94,16 +100,16 @@ void Moon::createAndLoadShader() {
     )";
 
     const char* fragment = R"(
-    #version 330 core
-    in vec3 fragColor;  // Incoming color from vertex shader
+        #version 330 core
+        in vec3 fragColor;  // Incoming color from vertex shader
 
-    out vec4 color;     // Final color output
+        out vec4 color;     // Final color output
 
-    void main() {
-        // Directly use the color passed from the vertex shader
-        color = vec4(fragColor, 1.0f);  // Combine color with alpha
-    }
-)";
+        void main() {
+            // Directly use the color passed from the vertex shader
+            color = vec4(fragColor, 1.0f);  // Combine color with alpha
+        }
+    )";
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertex, nullptr);

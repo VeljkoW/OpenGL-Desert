@@ -28,6 +28,12 @@ Sun::Sun(float startPosX, float startPosY) : posX(startPosX), posY(startPosY), s
     // Unbind the VAO
     glBindVertexArray(0);
 }
+Sun::~Sun()
+{
+    glDeleteVertexArrays(1, &VAO);
+    glDeleteBuffers(1, &VBO);
+    glDeleteProgram(shader);
+}
 
 void Sun::update(float deltaTime, float aspectRatio,bool isDay)
 {

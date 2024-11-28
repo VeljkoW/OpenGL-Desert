@@ -145,6 +145,7 @@
     <ClCompile Include="moon.cpp" />
     <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="sand.cpp" />
+    <ClCompile Include="star.cpp" />
     <ClCompile Include="sun.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +157,7 @@
     <ClInclude Include="moon.h" />
     <ClInclude Include="pyramid.h" />
     <ClInclude Include="sand.h" />
+    <ClInclude Include="star.h" />
     <ClInclude Include="stb_image.h" />
     <ClInclude Include="sun.h" />
   </ItemGroup>
