@@ -93,11 +93,17 @@ int main(void)
                 skyG = std::min(0.6f, skyG + 0.001f);
                 skyB = std::min(1.0f, skyB + 0.001f);
             }
+            else if (sun.getPosX() > -0.97f - sun.getRadius())
+            {
+                skyR = std::min(247.0f / 255.0f, skyR + 0.004f);  // Target red = 237 (more red)
+                skyG = std::min(147.0f / 255.0f, skyG + 0.003f);  // Target green = 138 (less green)
+                skyB = std::max(114.0f / 255.0f, skyB - 0.003f);  // Reduce blue for a warmer color
+            }
             else
             {
-                skyR = std::max(0.0f, skyR - 0.001f);
-                skyG = std::max(0.0f, skyG - 0.001f);
-                skyB = std::max(0.0f, skyB - 0.001f);
+                skyR = std::max(0.0f, skyR - 0.004f);
+                skyG = std::max(0.0f, skyG - 0.003f);
+                skyB = std::max(0.0f, skyB - 0.003f);
             }
             if (sun.getPosX() < -1.0f - sun.getRadius())
             {
@@ -111,9 +117,9 @@ int main(void)
 
             if (moon.getPosX() > -0.88 - moon.getRadius())
             {
-                skyR = std::max(0.0f, skyR - 0.001f);
-                skyG = std::max(0.0f, skyG - 0.001f);
-                skyB = std::max(0.0f, skyB - 0.001f);
+                skyR = std::max(0.0f, skyR - 0.004f);
+                skyG = std::max(0.0f, skyG - 0.003f);
+                skyB = std::max(0.0f, skyB - 0.003f);
             }
             else
             {
