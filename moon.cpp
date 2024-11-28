@@ -52,18 +52,30 @@ void Moon::update(float deltaTime, float aspectRatio, bool isDay) {
 void Moon::render() {
     glUseProgram(shader);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1);  // Changed back to numSegments + 1
     glBindVertexArray(0);
 }
 
 void Moon::createMoonVertices() {
     for (int i = 0; i <= numSegments; ++i) {
-        float angle = (i * 2.0f * 3.14159f) / numSegments;
-        vertices.push_back(cos(angle) * radius);
-        vertices.push_back(sin(angle) * radius);
-        vertices.push_back(0.7f); // Gray color
-        vertices.push_back(0.7f); // Gray color
-        vertices.push_back(0.7f); // Gray color
+        float angle = (i * 1.85f * 3.14159f) / numSegments;
+        float x = cos(angle) * radius;
+        float y = sin(angle) * radius;
+
+        // More precise color splitting using angle
+        float red, green, blue;
+        if (angle >= 3.4159f) {  // Right half of the circle (black side)
+            red = green = blue = 0.0f;
+        }
+        else {  // Left half of the circle (gray side)
+            red = green = blue = 0.7f;
+        }
+
+        vertices.push_back(x);     // x-coordinate
+        vertices.push_back(y);     // y-coordinate
+        vertices.push_back(red);   // Red component
+        vertices.push_back(green); // Green component
+        vertices.push_back(blue);  // Blue component
     }
 }
 
@@ -82,16 +94,16 @@ void Moon::createAndLoadShader() {
     )";
 
     const char* fragment = R"(
-        #version 330 core
-        in vec3 fragColor;  // Incoming color from vertex shader
+    #version 330 core
+    in vec3 fragColor;  // Incoming color from vertex shader
 
-        out vec4 color;     // Final color output
+    out vec4 color;     // Final color output
 
-        void main() {
-            vec3 glow = vec3(0.2, 0.2, 0.4);  // Add bluish glow
-            color = vec4(fragColor + glow, 1.0f);  // Combine base color with glow
-        }
-    )";
+    void main() {
+        // Directly use the color passed from the vertex shader
+        color = vec4(fragColor, 1.0f);  // Combine color with alpha
+    }
+)";
 
     GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShader, 1, &vertex, nullptr);
