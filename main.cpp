@@ -93,7 +93,7 @@ int main(void)
     while (!glfwWindowShouldClose(window)) 
     {
         float deltaTime = calculateDeltaTime();
-        if (isDay) {
+        if (isDay && sun.getSpeed() != 0.0f) {
             sun.update(deltaTime, aspectRatio,isDay);
 
             if (sun.getPosX() > -0.75f - sun.getRadius())
@@ -121,7 +121,8 @@ int main(void)
                 moon.update(deltaTime, aspectRatio, isDay);
             }
         }
-        else {
+        else if (moon.getSpeed() != 0.0f)
+        {
             moon.update(deltaTime, aspectRatio, isDay);
 
             if (moon.getPosX() > -0.88 - moon.getRadius())
@@ -156,6 +157,30 @@ int main(void)
         {
             glfwSetWindowShouldClose(window, GL_TRUE);
         }
+        if (glfwGetKey(window, GLFW_KEY_P) == GLFW_PRESS)
+        {
+            sun.setSpeed(0.0f);
+            moon.setSpeed(0.0f);
+        }
+        if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
+        {
+            sun.setSpeed(0.1f);
+            moon.setSpeed(0.1f);
+        }
+        if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS)
+        {
+            isDay = true;
+            sun.setSpeed(0.1f);
+            moon.setSpeed(0.1f);
+            skyR = 0.0f, 
+            skyG = 0.6f, 
+            skyB = 1.0f;
+            sun.setPosX(0.0f);
+            sun.setPosY(0.6f);
+            moon.setPosX(1.0f + moon.getRadius());
+            moon.setPosY(0.6f);
+        }
+        
 
         glClearColor(skyR, skyG, skyB, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
@@ -188,11 +213,11 @@ int main(void)
 }
 
 float calculateDeltaTime() {
-    static float lastFrameTime = 0.0f; // Time of the last frame
-    float currentFrameTime = glfwGetTime(); // Get the current time
-    float deltaTime = currentFrameTime - lastFrameTime; // Calculate the elapsed time
-    lastFrameTime = currentFrameTime; // Update the last frame time
-    return deltaTime; // Return the time difference
+    static float lastFrameTime = 0.0f;
+    float currentFrameTime = glfwGetTime();
+    float deltaTime = currentFrameTime - lastFrameTime;
+    lastFrameTime = currentFrameTime;
+    return deltaTime; 
 }
 
 void createStars(int numberOfStars) {
@@ -205,10 +230,9 @@ void createStars(int numberOfStars) {
 }
 
 void updateStars(float deltaTime, float skyR, float skyG, float skyB) {
-    // Calculate brightness based on the sky's color
-    float brightness = (skyR + skyG + skyB) / 3.0f; // Adjust calculation as needed
+    float brightness = (skyR + skyG + skyB) / 3.0f;
     for (const auto& star : stars) {
-        star->update(brightness);  // Use -> to call update on the actual Star
+        star->update(brightness); 
     }
 }
 

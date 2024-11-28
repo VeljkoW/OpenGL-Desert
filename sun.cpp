@@ -10,22 +10,17 @@ Sun::Sun(float startPosX, float startPosY) : posX(startPosX), posY(startPosY), s
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
-    // Bind the VAO
     glBindVertexArray(VAO);
 
-    // Bind the VBO and upload the vertex data
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
 
-    // Position attribute (x, y)
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Color attribute (r, g, b)
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    // Unbind the VAO
     glBindVertexArray(0);
 }
 Sun::~Sun()
@@ -37,35 +32,29 @@ Sun::~Sun()
 
 void Sun::update(float deltaTime, float aspectRatio,bool isDay)
 {
-    posX -= speed * deltaTime; // Move the sun to the left
+    posX -= speed * deltaTime;
 
-    // Reset position when it goes off-screen
     if (posX < -1.0f - radius && !isDay) {
-        posX = 1.0f + radius; // Re-enter from the right side
+        posX = 1.0f + radius; 
     }
 
-    // Parameters for the sine wave
-    float waveAmplitude = 0.15f;  // Max height of the curve
-    float waveWidth = 4.0f;       // Controls how wide the curve is
-    float centerScreen = 0.6f;    // Baseline for the curve (height of the sun)
+    float waveAmplitude = 0.15f;  
+    float waveWidth = 4.0f;       
+    float centerScreen = 0.6f;   
 
-    // Normalize posX to [0, 2π] for a full sine wave period
-    float normalizedX = (posX + 1.0f) * 3.14159f / 2.0f; // Mapping [-1, 1] to [0, 2π]
+    float normalizedX = (posX + 1.0f) * 3.14159f / 2.0f; 
 
-    // Calculate the sine curve position
     posY = centerScreen + waveAmplitude * sin(normalizedX);
 
-    // Update the sun's position in the vertex buffer (for rendering)
     for (int i = 0; i <= numSegments; ++i) {
         float angle = i * 2.0f * 3.14159f / numSegments;
         float x = cos(angle) * radius;
         float y = sin(angle) * radius;
 
-        vertices[i * 5] = x / aspectRatio + posX; // Adjust x for aspect ratio
-        vertices[i * 5 + 1] = y + posY;          // y remains unchanged
+        vertices[i * 5] = x / aspectRatio + posX; 
+        vertices[i * 5 + 1] = y + posY;          
     }
 
-    // Update VBO with new position data
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), &vertices[0]);
 }
@@ -75,9 +64,8 @@ void Sun::update(float deltaTime, float aspectRatio,bool isDay)
 void Sun::render() {
     glUseProgram(shader);
 
-    // Bind the VAO and draw the sun
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1); // Draw the circle (fan of triangles)
+    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1);
     glBindVertexArray(0);
 }
 
@@ -85,11 +73,11 @@ void Sun::createSunVertices()
 {
     for (int i = 0; i <= numSegments; ++i) {
         float angle = (i * 2.0f * 3.14159f) / numSegments;
-        vertices.push_back(cos(angle) * radius); // x
-        vertices.push_back(sin(angle) * radius); // y
-        vertices.push_back(1.0f);  // Color: Yellow (R)
-        vertices.push_back(1.0f);  // Color: Yellow (G)
-        vertices.push_back(0.0f);  // Color: Yellow (B)
+        vertices.push_back(cos(angle) * radius); 
+        vertices.push_back(sin(angle) * radius); 
+        vertices.push_back(1.0f);  
+        vertices.push_back(1.0f);  
+        vertices.push_back(0.0f);  
     }
 }
 
@@ -164,9 +152,15 @@ float Sun::getPosY() const {
 float Sun::getRadius() const {
     return radius;
 }
+float Sun::getSpeed() const {
+    return speed;
+}
 void Sun::setPosX(float x) {
     posX = x;
 }
 void Sun::setPosY(float y) {
     posY = y;
+}
+void Sun::setSpeed(float s) {
+    speed = s;
 }

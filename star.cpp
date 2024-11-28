@@ -47,7 +47,7 @@ void Star::render()
     glUniform1f(alphaLoc, alpha);
     glPointSize(5.0f);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_POINTS, 0, 1); // Render as a single point (star)
+    glDrawArrays(GL_POINTS, 0, 1);
     glBindVertexArray(0);
 }
 
@@ -110,7 +110,6 @@ void Star::createAndLoadShader() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    // **Retrieve the uniform location after the shader is linked**
     alphaLoc = glGetUniformLocation(shader, "alpha");
     if (alphaLoc == -1) {
         std::cerr << "Warning: Failed to find uniform 'alpha'!" << std::endl;
