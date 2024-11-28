@@ -142,8 +142,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="moon.cpp" />
     <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="sand.cpp" />
+    <ClCompile Include="star.cpp" />
+    <ClCompile Include="sun.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="basic.frag" />
@@ -151,9 +154,12 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="moon.h" />
     <ClInclude Include="pyramid.h" />
     <ClInclude Include="sand.h" />
+    <ClInclude Include="star.h" />
     <ClInclude Include="stb_image.h" />
+    <ClInclude Include="sun.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\brick.jpg" />
