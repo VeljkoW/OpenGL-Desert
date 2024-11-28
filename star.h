@@ -17,6 +17,7 @@ class Star {
 		GLuint VAO, VBO;
 		GLuint shader;
 		void createAndLoadShader();
+		GLint alphaLoc;
 
 
 };

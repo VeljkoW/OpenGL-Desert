@@ -3,10 +3,10 @@
 #include <sstream>
 
 
-Star::Star(float x, float y) : alpha(0.0f) 
+Star::Star(float x, float y) : alpha(0.0f)
 {
     GLfloat vertices[] = {
-        x, y  
+        x, y
     };
     createAndLoadShader();
 
@@ -16,7 +16,8 @@ Star::Star(float x, float y) : alpha(0.0f)
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(GLfloat), (GLvoid*)0);
     glEnableVertexAttribArray(0);
     glBindVertexArray(0);
@@ -37,8 +38,8 @@ void Star::render()
 {
     glUseProgram(shader);
 
-    glUniform1f(glGetUniformLocation(shader, "alpha"), alpha);
-
+    glUniform1f(alphaLoc, alpha);
+    glPointSize(5.0f);
     glBindVertexArray(VAO);
     glDrawArrays(GL_POINTS, 0, 1); // Render as a single point (star)
     glBindVertexArray(0);
@@ -76,7 +77,7 @@ void Star::createAndLoadShader() {
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        std::cerr << "Sand vertex Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Vertex Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -86,7 +87,7 @@ void Star::createAndLoadShader() {
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        std::cerr << "Sand fragment Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Fragment Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     shader = glCreateProgram();
@@ -97,9 +98,15 @@ void Star::createAndLoadShader() {
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Sand shader Linking Error:\n" << infoLog << std::endl;
+        std::cerr << "Shader Linking Error:\n" << infoLog << std::endl;
     }
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+
+    // **Retrieve the uniform location after the shader is linked**
+    alphaLoc = glGetUniformLocation(shader, "alpha");
+    if (alphaLoc == -1) {
+        std::cerr << "Warning: Failed to find uniform 'alpha'!" << std::endl;
+    }
 }

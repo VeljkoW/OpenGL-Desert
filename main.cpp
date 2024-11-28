@@ -10,8 +10,15 @@
 #include "pyramid.h"
 #include "sun.h"
 #include "moon.h"
+#include "star.h"
+
+
+std::vector<std::unique_ptr<Star>> stars;
 
 float calculateDeltaTime();
+void createStars(int numberOfStars);
+void updateStars(float deltaTime, float skyR, float skyG, float skyB);
+void renderStars();
 
 int main(void)
 {
@@ -81,6 +88,8 @@ int main(void)
 
     float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
 
+    createStars(15);
+
     while (!glfwWindowShouldClose(window)) 
     {
         float deltaTime = calculateDeltaTime();
@@ -95,9 +104,9 @@ int main(void)
             }
             else if (sun.getPosX() > -0.97f - sun.getRadius())
             {
-                skyR = std::min(247.0f / 255.0f, skyR + 0.004f);  // Target red = 237 (more red)
-                skyG = std::min(147.0f / 255.0f, skyG + 0.003f);  // Target green = 138 (less green)
-                skyB = std::max(114.0f / 255.0f, skyB - 0.003f);  // Reduce blue for a warmer color
+                skyR = std::min(247.0f / 255.0f, skyR + 0.004f);  
+                skyG = std::min(147.0f / 255.0f, skyG + 0.003f);  
+                skyB = std::max(114.0f / 255.0f, skyB - 0.003f);
             }
             else
             {
@@ -141,6 +150,8 @@ int main(void)
         if (skyB < 0.0f) skyB = 0.0f;
         if (skyB > 1.0f) skyB = 1.0f;
 
+
+
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         {
             glfwSetWindowShouldClose(window, GL_TRUE);
@@ -153,11 +164,15 @@ int main(void)
         {
             sun.render();
         }
-        else {
+        else 
+        {
+            updateStars(deltaTime, skyR, skyG, skyB);
+            renderStars();
             moon.render();
         }
 
         sand.render();
+
 
         pyramid1.render();
         pyramid2.render();
@@ -178,4 +193,27 @@ float calculateDeltaTime() {
     float deltaTime = currentFrameTime - lastFrameTime; // Calculate the elapsed time
     lastFrameTime = currentFrameTime; // Update the last frame time
     return deltaTime; // Return the time difference
+}
+
+void createStars(int numberOfStars) {
+    for (int i = 0; i < 15; ++i) 
+    {
+        float x = (rand() % 2000 - 1000) / 1000.0f;
+        float y = (rand() % 1000) / 1000.0f;
+        stars.push_back(std::make_unique<Star>(x, y));
+    }
+}
+
+void updateStars(float deltaTime, float skyR, float skyG, float skyB) {
+    // Calculate brightness based on the sky's color
+    float brightness = (skyR + skyG + skyB) / 3.0f; // Adjust calculation as needed
+    for (const auto& star : stars) {
+        star->update(brightness);  // Use -> to call update on the actual Star
+    }
+}
+
+void renderStars() {
+    for (const auto& star : stars) {
+        star->render();  
+    }
 }
