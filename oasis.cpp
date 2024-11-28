@@ -1,87 +1,69 @@
-﻿#include "Sun.h"
+#include "oasis.h"
 #include <iostream>
+#include <sstream>
 
-Sun::Sun(float startPosX, float startPosY) : posX(startPosX), posY(startPosY), speed(0.1f) 
+
+Oasis::Oasis()
 {
-    numSegments = 360;
-    radius = 0.1f;
-    createSunVertices();
+
+    // Define the ellipse parameters
+    const int numSegments = 100; // Higher for smoother ellipse
+    const float centerX = -0.5f; // Center in the bottom-left quadrant
+    const float centerY = -0.5f;
+    const float radiusX = 0.4f;  // Horizontal radius
+    const float radiusY = 0.2f;  // Vertical radius
+
+    // Create vertices for the ellipse
+    std::vector<float> vertices;
+    for (int i = 0; i <= numSegments; ++i) {
+        float angle = 2.0f * 3.1415926535897932384 * i / numSegments;
+        float x = centerX + radiusX * cos(angle);
+        float y = centerY + radiusY * sin(angle);
+
+        // Add position (x, y) and color (light blue)
+        vertices.push_back(x);
+        vertices.push_back(y);
+        vertices.push_back(0.6f); // R
+        vertices.push_back(0.8f); // G
+        vertices.push_back(1.0f); // B
+    }
     createAndLoadShader();
+
+    // Set up VAO and VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
     glBindVertexArray(VAO);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), &vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
+    // Vertex positions
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
+    // Vertex colors
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 }
-Sun::~Sun()
+Oasis::~Oasis()
 {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shader);
 }
-
-void Sun::update(float deltaTime, float aspectRatio,bool isDay)
+void Oasis::render()
 {
-    posX -= speed * deltaTime;
-
-    if (posX < -1.0f - radius && !isDay) {
-        posX = 1.0f + radius; 
-    }
-
-    float waveAmplitude = 0.15f;  
-    float waveWidth = 4.0f;       
-    float centerScreen = 0.6f;   
-
-    float normalizedX = (posX + 1.0f) * 3.14159f / 2.0f; 
-
-    posY = centerScreen + waveAmplitude * sin(normalizedX);
-
-    for (int i = 0; i <= numSegments; ++i) {
-        float angle = i * 2.0f * 3.14159f / numSegments;
-        float x = cos(angle) * radius;
-        float y = sin(angle) * radius;
-
-        vertices[i * 5] = x / aspectRatio + posX; 
-        vertices[i * 5 + 1] = y + posY;          
-    }
-
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(float), &vertices[0]);
-}
-
-
-
-void Sun::render() {
     glUseProgram(shader);
-
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1);
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 101); // 100 segments + center
     glBindVertexArray(0);
+    glUseProgram(0);
 }
-
-void Sun::createSunVertices()
-{
-    for (int i = 0; i <= numSegments; ++i) {
-        float angle = (i * 2.0f * 3.14159f) / numSegments;
-        vertices.push_back(cos(angle) * radius); 
-        vertices.push_back(sin(angle) * radius); 
-        vertices.push_back(1.0f);  
-        vertices.push_back(1.0f);  
-        vertices.push_back(0.0f);  
-    }
-}
-
-void Sun::createAndLoadShader()
+void Oasis::createAndLoadShader()
 {
     const char* vertex = R"(
         #version 330 core
@@ -116,7 +98,7 @@ void Sun::createAndLoadShader()
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        std::cerr << "Sand vertex Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Vertex Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -126,7 +108,7 @@ void Sun::createAndLoadShader()
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        std::cerr << "Sand fragment Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Fragment Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     shader = glCreateProgram();
@@ -137,30 +119,9 @@ void Sun::createAndLoadShader()
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Sand shader Linking Error:\n" << infoLog << std::endl;
+        std::cerr << "Shader Linking Error:\n" << infoLog << std::endl;
     }
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
-}
-float Sun::getPosX() const {
-    return posX;
-}
-float Sun::getPosY() const {
-    return posY;
-}
-float Sun::getRadius() const {
-    return radius;
-}
-float Sun::getSpeed() const {
-    return speed;
-}
-void Sun::setPosX(float x) {
-    posX = x;
-}
-void Sun::setPosY(float y) {
-    posY = y;
-}
-void Sun::setSpeed(float s) {
-    speed = s;
 }

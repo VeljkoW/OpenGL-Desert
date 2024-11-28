@@ -13,8 +13,10 @@ class Moon {
         float getPosX() const;
         float getPosY() const;
         float getRadius() const;
+        float getSpeed() const;
         void setPosX(float x);
         void setPosY(float y);
+        void setSpeed(float s);
     private:
         void createMoonVertices();
         void createAndLoadShader();

@@ -31,7 +31,13 @@ Star::~Star()
 
 void Star::update(float brightness)
 {
-    alpha = 1.0f - brightness;
+    float targetAlpha = 1.0f - brightness;
+
+    float transitionSpeed = 0.2f;
+    alpha += (targetAlpha - alpha) * transitionSpeed;
+
+    if (alpha < 0.0f) alpha = 0.0f;
+    if (alpha > 1.0f) alpha = 1.0f;
 }
 
 void Star::render()
@@ -41,7 +47,7 @@ void Star::render()
     glUniform1f(alphaLoc, alpha);
     glPointSize(5.0f);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_POINTS, 0, 1); // Render as a single point (star)
+    glDrawArrays(GL_POINTS, 0, 1);
     glBindVertexArray(0);
 }
 
@@ -104,7 +110,6 @@ void Star::createAndLoadShader() {
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
 
-    // **Retrieve the uniform location after the shader is linked**
     alphaLoc = glGetUniformLocation(shader, "alpha");
     if (alphaLoc == -1) {
         std::cerr << "Warning: Failed to find uniform 'alpha'!" << std::endl;

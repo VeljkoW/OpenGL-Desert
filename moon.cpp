@@ -29,10 +29,10 @@ Moon::~Moon()
 }
 
 void Moon::update(float deltaTime, float aspectRatio, bool isDay) {
-    posX -= speed * deltaTime; // Move the moon to the right
+    posX -= speed * deltaTime; 
 
     if (posX < -1.0f - radius && isDay) {
-        posX = 1.0f + radius; // Reset position to the left side
+        posX = 1.0f + radius;
     }
 
     float waveAmplitude = 0.15f;
@@ -58,7 +58,7 @@ void Moon::update(float deltaTime, float aspectRatio, bool isDay) {
 void Moon::render() {
     glUseProgram(shader);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1);  // Changed back to numSegments + 1
+    glDrawArrays(GL_TRIANGLE_FAN, 0, numSegments + 1);
     glBindVertexArray(0);
 }
 
@@ -68,20 +68,19 @@ void Moon::createMoonVertices() {
         float x = cos(angle) * radius;
         float y = sin(angle) * radius;
 
-        // More precise color splitting using angle
         float red, green, blue;
-        if (angle >= 3.4159f) {  // Right half of the circle (black side)
+        if (angle >= 3.4159f) {  
             red = green = blue = 0.0f;
         }
-        else {  // Left half of the circle (gray side)
+        else {  
             red = green = blue = 0.7f;
         }
 
-        vertices.push_back(x);     // x-coordinate
-        vertices.push_back(y);     // y-coordinate
-        vertices.push_back(red);   // Red component
-        vertices.push_back(green); // Green component
-        vertices.push_back(blue);  // Blue component
+        vertices.push_back(x);     
+        vertices.push_back(y);     
+        vertices.push_back(red);   
+        vertices.push_back(green); 
+        vertices.push_back(blue);  
     }
 }
 
@@ -156,9 +155,15 @@ float Moon::getPosY() const {
 float Moon::getRadius() const {
     return radius;
 }
+float Moon::getSpeed() const {
+    return speed;
+}
 void Moon::setPosX(float x) {
     posX = x;
 }
 void Moon::setPosY(float y) {
     posY = y;
+}
+void Moon::setSpeed(float s) {
+    speed = s;
 }
