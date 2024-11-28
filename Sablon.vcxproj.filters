@@ -36,6 +36,15 @@
     <ClCompile Include="star.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="oasis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="grassBlades.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="grassBed.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -63,6 +72,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="star.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oasis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="grassBlades.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="grassBed.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

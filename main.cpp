@@ -11,7 +11,9 @@
 #include "sun.h"
 #include "moon.h"
 #include "star.h"
-
+#include "oasis.h"
+#include "grassBlades.h"
+#include "grassBed.h"
 
 std::vector<std::unique_ptr<Star>> stars;
 
@@ -85,6 +87,10 @@ int main(void)
 
     Sun sun(0.0f, 0.6f);
     Moon moon(1.0f + 0.1f, 0.6f);
+    
+    GrassBed grassBed = GrassBed();
+    Oasis oasis = Oasis();
+    GrassBlades grassBlades = GrassBlades();
 
     float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
 
@@ -180,6 +186,17 @@ int main(void)
             moon.setPosX(1.0f + moon.getRadius());
             moon.setPosY(0.6f);
         }
+        if (glfwGetKey(window, GLFW_KEY_1) == GLFW_PRESS)
+        {
+            grassBed.setAlpha(0.0f);
+            grassBlades.setAlpha(0.0f);
+        }
+        if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
+        {
+            grassBed.setAlpha(1.0f);
+            grassBlades.setAlpha(1.0f);
+        }
+        
         
 
         glClearColor(skyR, skyG, skyB, 1.0f);
@@ -197,7 +214,9 @@ int main(void)
         }
 
         sand.render();
-
+        grassBed.render();
+        oasis.render();
+        grassBlades.render();
 
         pyramid1.render();
         pyramid2.render();

@@ -141,8 +141,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="grassBed.cpp" />
+    <ClCompile Include="grassBlades.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moon.cpp" />
+    <ClCompile Include="oasis.cpp" />
     <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="sand.cpp" />
     <ClCompile Include="star.cpp" />
@@ -154,7 +157,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="grassBed.h" />
+    <ClInclude Include="grassBlades.h" />
     <ClInclude Include="moon.h" />
+    <ClInclude Include="oasis.h" />
     <ClInclude Include="pyramid.h" />
     <ClInclude Include="sand.h" />
     <ClInclude Include="star.h" />
