@@ -86,34 +86,48 @@ int main(void)
         float deltaTime = calculateDeltaTime();
         if (isDay) {
             sun.update(deltaTime, aspectRatio,isDay);
-            // Transition the sky color from bright blue to darker as sun sets
-            skyR = std::max(0.0f, skyR - 0.001f);
-            skyG = std::min(0.6f, skyG + 0.001f);
-            skyB = std::min(1.0f, skyB + 0.001f);
-            // When the sun goes off the left side, switch to night
+
+            if (sun.getPosX() > -0.75f - sun.getRadius())
+            {
+                skyR = std::max(0.0f, skyR - 0.001f);
+                skyG = std::min(0.6f, skyG + 0.001f);
+                skyB = std::min(1.0f, skyB + 0.001f);
+            }
+            else
+            {
+                skyR = std::max(0.0f, skyR - 0.001f);
+                skyG = std::max(0.0f, skyG - 0.001f);
+                skyB = std::max(0.0f, skyB - 0.001f);
+            }
             if (sun.getPosX() < -1.0f - sun.getRadius())
             {
-                isDay = false; // It's now night
-                moon.setPosX(1.0f + moon.getRadius()); // Start the moon from the right
+                isDay = false;
+                moon.setPosX(1.0f + moon.getRadius());
                 moon.update(deltaTime, aspectRatio, isDay);
             }
         }
         else {
             moon.update(deltaTime, aspectRatio, isDay);
-            // Transition the sky color from bright blue to dark blue/black during the night
-            skyR = std::max(0.0f, skyR - 0.001f);
-            skyG = std::max(0.0f, skyG - 0.001f);
-            skyB = std::max(0.0f, skyB - 0.001f);
 
-            // When the moon goes off the left side, switch to day
+            if (moon.getPosX() > -0.88 - moon.getRadius())
+            {
+                skyR = std::max(0.0f, skyR - 0.001f);
+                skyG = std::max(0.0f, skyG - 0.001f);
+                skyB = std::max(0.0f, skyB - 0.001f);
+            }
+            else
+            {
+                skyR = std::max(0.0f, skyR - 0.001f);
+                skyG = std::min(0.6f, skyG + 0.001f);
+                skyB = std::min(1.0f, skyB + 0.001f);
+            }
+
             if (moon.getPosX() < -1.0f - moon.getRadius()) {
-                isDay = true; // It's now day
-                sun.setPosX(1.0f + sun.getRadius()); // Start the sun from the right
+                isDay = true;
+                sun.setPosX(1.0f + sun.getRadius());
             }
         }
-        //std::cout << "Sky Color: " << skyR << ", " << skyG << ", " << skyB << std::endl;
 
-        // Ensure the sky color values stay within bounds (0 to 1)
         if (skyR < 0.0f) skyR = 0.0f;
         if (skyR > 1.0f) skyR = 1.0f;
         if (skyG < 0.0f) skyG = 0.0f;
