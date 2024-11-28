@@ -31,7 +31,13 @@ Star::~Star()
 
 void Star::update(float brightness)
 {
-    alpha = 1.0f - brightness;
+    float targetAlpha = 1.0f - brightness;
+
+    float transitionSpeed = 0.2f;
+    alpha += (targetAlpha - alpha) * transitionSpeed;
+
+    if (alpha < 0.0f) alpha = 0.0f;
+    if (alpha > 1.0f) alpha = 1.0f;
 }
 
 void Star::render()
