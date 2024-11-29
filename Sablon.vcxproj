@@ -147,6 +147,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="moon.cpp" />
     <ClCompile Include="oasis.cpp" />
+    <ClCompile Include="oasisSurface.cpp" />
     <ClCompile Include="pyramid.cpp" />
     <ClCompile Include="sand.cpp" />
     <ClCompile Include="star.cpp" />
@@ -163,6 +164,7 @@
     <ClInclude Include="grassBlades.h" />
     <ClInclude Include="moon.h" />
     <ClInclude Include="oasis.h" />
+    <ClInclude Include="oasisSurface.h" />
     <ClInclude Include="pyramid.h" />
     <ClInclude Include="sand.h" />
     <ClInclude Include="star.h" />

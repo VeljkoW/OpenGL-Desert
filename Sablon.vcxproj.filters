@@ -45,6 +45,12 @@
     <ClCompile Include="grassBed.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="fish.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="oasisSurface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -81,6 +87,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="grassBed.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="fish.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="oasisSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
