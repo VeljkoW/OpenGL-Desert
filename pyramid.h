@@ -9,7 +9,8 @@ class Pyramid {
 public:
 	Pyramid(const std::string& texturePath, float baseWidth, float height, float xPos, float yPos);
 	~Pyramid();
-	void render();
+	void render(GLFWwindow* window, bool isBiggest);
+	void colorRed(bool isRight);
 
 private:
 	GLuint VAO, VBO;
@@ -17,6 +18,8 @@ private:
 	GLuint shader;
 	void loadImageToTexture(const std::string& texturePath);
 	void createAndLoadShader();
+	float progress;
+	bool isMovingForward;
 };
 
 

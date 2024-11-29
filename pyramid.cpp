@@ -5,7 +5,9 @@
 #include <fstream>
 
 Pyramid::Pyramid(const std::string& texturePath, float baseWidth, float height, float xPos, float yPos) {
-    // Define vertices for two triangles to create a pyramid shape
+    progress = 0.0f;
+    isMovingForward = false;
+
     float vertices[] = {
         // First triangle (Left side of the pyramid)
         -baseWidth / 2.0f,  0.0f,   0.0f,    0.0f, 0.0f,  // Bottom-left
@@ -55,14 +57,44 @@ Pyramid::~Pyramid() {
     glDeleteTextures(1, &textureID);
     glDeleteProgram(shader);
 }
+void Pyramid::colorRed(bool isRight)
+{
+    if (isRight)
+    {
+        if (progress < 1.0f)
+        {
+            progress += 0.01f;
+            isMovingForward = true;
+        }
+    }
+    else if (!isRight)
+    {
+        if (progress > 0.0f)
+        {
+            progress -= 0.01f;
+            isMovingForward = false;
+        }
+    }
+    glUniform1f(glGetUniformLocation(shader, "progress"), progress);
+}
 
-void Pyramid::render() {
+void Pyramid::render(GLFWwindow* window,bool isBiggest) {
     glUseProgram(shader);
     if (textureID == 0) {
         std::cerr << "Error: Invalid texture ID" << std::endl;
         return;
     }
-
+    if (isBiggest)
+    {
+        if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+            // Move forward (painting stripes to the right)
+            colorRed(true);  // true indicates moving forward (right)
+        }
+        else if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+            // Move backward (reverting stripes)
+            colorRed(false);  // false indicates moving backward (left)
+        }
+    }
     glBindVertexArray(VAO);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, textureID);
@@ -120,11 +152,21 @@ void Pyramid::createAndLoadShader() {
         in vec2 chTex; 
         out vec4 outCol;
 
-        uniform sampler2D uTex; 
+        uniform sampler2D uTex;
+        uniform float progress;  // Add a uniform for progress
 
         void main()
         {
-            outCol = texture(uTex, chTex);
+            vec4 textureColor = texture(uTex, chTex);
+
+            // Only apply the red color on the left triangle initially and extend to the right triangle later
+            if (chTex.x < progress) {
+                // If we're in the left triangle and progress has started, color red
+                outCol = vec4(1.0, 0.0, 0.0, 1.0);  // Red for stripe
+            } else {
+                // Original texture color (right triangle or beyond progress)
+                outCol = textureColor;
+            }
         }
     )";
 

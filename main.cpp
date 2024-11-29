@@ -229,9 +229,9 @@ int main(void)
 
         grassBlades.render();
 
-        pyramid1.render();
-        pyramid2.render();
-        pyramid3.render();
+        pyramid1.render(window,true);
+        pyramid2.render(window,false);
+        pyramid3.render(window,false);
 
 
         glfwSwapBuffers(window);
