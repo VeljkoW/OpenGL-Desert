@@ -6,30 +6,26 @@
 Oasis::Oasis()
 {
 
-    // Define the ellipse parameters
-    const int numSegments = 100; // Higher for smoother ellipse
-    const float centerX = -0.5f; // Center in the bottom-left quadrant
+    const int numSegments = 100; 
+    const float centerX = -0.5f; 
     const float centerY = -0.5f;
-    const float radiusX = 0.4f;  // Horizontal radius
-    const float radiusY = 0.2f;  // Vertical radius
+    const float radiusX = 0.4f;  
+    const float radiusY = 0.2f;  
 
-    // Create vertices for the ellipse
     std::vector<float> vertices;
     for (int i = 0; i <= numSegments; ++i) {
         float angle = 2.0f * 3.1415926535897932384 * i / numSegments;
         float x = centerX + radiusX * cos(angle);
         float y = centerY + radiusY * sin(angle);
 
-        // Add position (x, y) and color (light blue)
         vertices.push_back(x);
         vertices.push_back(y);
-        vertices.push_back(0.6f); // R
-        vertices.push_back(0.8f); // G
-        vertices.push_back(1.0f); // B
+        vertices.push_back(0.6f);
+        vertices.push_back(0.8f); 
+        vertices.push_back(1.0f); 
     }
     createAndLoadShader();
 
-    // Set up VAO and VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -38,11 +34,9 @@ Oasis::Oasis()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // Vertex positions
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Vertex colors
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
@@ -59,7 +53,7 @@ void Oasis::render()
 {
     glUseProgram(shader);
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 101); // 100 segments + center
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 101); 
     glBindVertexArray(0);
     glUseProgram(0);
 }

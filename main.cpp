@@ -14,6 +14,8 @@
 #include "oasis.h"
 #include "grassBlades.h"
 #include "grassBed.h"
+#include "fish.h"
+#include "oasisSurface.h"
 
 std::vector<std::unique_ptr<Star>> stars;
 
@@ -91,6 +93,9 @@ int main(void)
     GrassBed grassBed = GrassBed();
     Oasis oasis = Oasis();
     GrassBlades grassBlades = GrassBlades();
+
+    Fish fish = Fish(-0.5f,-0.48f);
+    OasisSurface oasisSurface = OasisSurface();
 
     float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
 
@@ -190,11 +195,13 @@ int main(void)
         {
             grassBed.setAlpha(0.0f);
             grassBlades.setAlpha(0.0f);
+            oasisSurface.setAlpha(0.5f);
         }
         if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
         {
             grassBed.setAlpha(1.0f);
             grassBlades.setAlpha(1.0f);
+            oasisSurface.setAlpha(1.0f);
         }
         
         
@@ -216,6 +223,10 @@ int main(void)
         sand.render();
         grassBed.render();
         oasis.render();
+        fish.updatePosition(deltaTime);
+        fish.render();
+        oasisSurface.render();
+
         grassBlades.render();
 
         pyramid1.render();
