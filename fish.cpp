@@ -23,11 +23,14 @@ void Fish::render()
 
     glBindVertexArray(VAO);
 
-    // Draw the ellipse
+    // Draw the ellipse (body)
     glDrawArrays(GL_TRIANGLE_FAN, 0, 102); // 1 center + 100 segments + 1 closing segment
 
     // Draw the triangle (tail)
     glDrawArrays(GL_TRIANGLES, 102, 3);
+
+    // Draw the eye (circle)
+    glDrawArrays(GL_TRIANGLE_FAN, 105, 102); // 1 center + 100 segments + 1 closing segment
 
     glBindVertexArray(0);
 }
@@ -69,6 +72,31 @@ void Fish::setupVertices()
 
     // Add triangle vertices to the list
     vertices.insert(vertices.end(), std::begin(triangleVertices), std::end(triangleVertices));
+
+    // Add eye (small circle) near the head
+    const float eyeCenterX = -0.03f; // Slightly to the right of the ellipse's center
+    const float eyeCenterY = 0.01f; // Slightly above the center
+    const float eyeRadius = 0.005f; // Small circle for the eye
+
+    // Add eye center
+    vertices.push_back(eyeCenterX);
+    vertices.push_back(eyeCenterY);
+    vertices.push_back(0.0f);  // R (black eye)
+    vertices.push_back(0.0f);  // G
+    vertices.push_back(0.0f);  // B
+
+    // Generate eye outline vertices
+    for (int i = 0; i <= segments; ++i) {
+        float angle = (2.0f * 3.1456 * i) / segments;
+        float x = eyeCenterX + eyeRadius * cos(angle);
+        float y = eyeCenterY + eyeRadius * sin(angle);
+
+        vertices.push_back(x);
+        vertices.push_back(y);
+        vertices.push_back(0.0f);  // R (black eye)
+        vertices.push_back(0.0f);  // G
+        vertices.push_back(0.0f);  // B
+    }
 
     // Set up VBO and VAO
     glGenVertexArrays(1, &VAO);

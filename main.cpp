@@ -93,7 +93,7 @@ int main(void)
     Oasis oasis = Oasis();
     GrassBlades grassBlades = GrassBlades();
 
-    Fish fish = Fish(0.0f,0.0f);
+    Fish fish = Fish(-0.4f,-0.47f);
 
     float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
 
@@ -219,16 +219,14 @@ int main(void)
         sand.render();
         grassBed.render();
         oasis.render();
+        fish.render();
 
-        //update(deltaTime);
-        //fish.render();
         grassBlades.render();
 
         pyramid1.render();
         pyramid2.render();
         pyramid3.render();
 
-        fish.render();
 
         glfwSwapBuffers(window);
         glfwPollEvents();
