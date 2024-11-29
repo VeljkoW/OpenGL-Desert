@@ -1,8 +1,9 @@
 ﻿#include "fish.h"
 #include <iostream>
 #include <sstream>
+#include <GLFW/glfw3.h>
 
-Fish::Fish(float x, float y) : posX(x), posY(y)
+Fish::Fish(float x, float y) : posX(x), posY(y), movingRight(true), speed(0.01f), direction(-1.0f)
 {
     setupVertices();
     createAndLoadShader();
@@ -13,24 +14,40 @@ Fish::~Fish()
     glDeleteBuffers(1, &VBO);
     glDeleteProgram(shader);
 }
+void Fish::updatePosition(float deltaTime)
+{
+    if (movingRight) {
+        posX += speed * deltaTime;
+        if (posX >= -0.3f) {  
+            movingRight = false;  
+            direction = 1.0f;   
+        }
+    }
+    else {
+        posX -= speed * deltaTime;
+        if (posX <= -0.7f) { 
+            movingRight = true;  
+            direction = -1.0f;     
+        }
+    }
+}
 void Fish::render()
 {
     glUseProgram(shader);
 
-    // Set the fish position
     GLint posLocation = glGetUniformLocation(shader, "fishPos");
     glUniform2f(posLocation, posX, posY);
 
+    GLint flipLocation = glGetUniformLocation(shader, "flipDirection");
+    glUniform1f(flipLocation, direction); 
+
     glBindVertexArray(VAO);
-
-    // Draw the ellipse (body)
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 102); // 1 center + 100 segments + 1 closing segment
-
-    // Draw the triangle (tail)
+    //for the body
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 102);
+    //for the tail
     glDrawArrays(GL_TRIANGLES, 102, 3);
-
-    // Draw the eye (circle)
-    glDrawArrays(GL_TRIANGLE_FAN, 105, 102); // 1 center + 100 segments + 1 closing segment
+    //for the eye
+    glDrawArrays(GL_TRIANGLE_FAN, 105, 102); 
 
     glBindVertexArray(0);
 }
@@ -38,54 +55,46 @@ void Fish::setupVertices()
 {
     std::vector<float> vertices;
 
-    // Ellipse settings (scaled down by half)
     const int segments = 100;
-    const float radiusX = 0.05f; // Half of the original 0.15f
-    const float radiusY = 0.03333f;  // Half of the original 0.1f
+    const float radiusX = 0.05f;
+    const float radiusY = 0.03333f; 
 
-    // Add the center of the ellipse
-    vertices.push_back(0.0f);  // X
-    vertices.push_back(0.0f);  // Y
-    vertices.push_back(1.0f);  // R
-    vertices.push_back(0.5f);  // G
-    vertices.push_back(0.0f);  // B
+    vertices.push_back(0.0f);  
+    vertices.push_back(0.0f);  
+    vertices.push_back(1.0f);  
+    vertices.push_back(0.5f);  
+    vertices.push_back(0.0f);  
 
-    // Generate ellipse outline vertices
     for (int i = 0; i <= segments; ++i) {
         float angle = (2.0f * 3.1456 * i) / segments;
-        float x = radiusX * cos(angle); // Scaled radiusX
-        float y = radiusY * sin(angle); // Scaled radiusY
+        float x = radiusX * cos(angle); 
+        float y = radiusY * sin(angle); 
 
         vertices.push_back(x);
         vertices.push_back(y);
-        vertices.push_back(1.0f);  // R
-        vertices.push_back(0.5f);  // G
-        vertices.push_back(0.0f);  // B
+        vertices.push_back(1.0f);  
+        vertices.push_back(0.5f);  
+        vertices.push_back(0.0f);  
     }
 
-    // Generate triangle vertices (tail) - scaled down by half
     float triangleVertices[] = {
-        0.01666666f,  0.0f,  1.0f, 0.5f, 0.0f,  // Inside vertex (0.05f / 2)
-        0.08333333f, -0.04f, 1.0f, 0.5f, 0.0f,  // Left vertex (0.25f / 2)
-        0.08333333f,  0.04f, 1.0f, 0.5f, 0.0f,  // Top vertex (0.25f / 2)
+        0.01666666f,  0.0f,  1.0f, 0.5f, 0.0f,  
+        0.08333333f, -0.04f, 1.0f, 0.5f, 0.0f,  
+        0.08333333f,  0.04f, 1.0f, 0.5f, 0.0f,  
     };
 
-    // Add triangle vertices to the list
     vertices.insert(vertices.end(), std::begin(triangleVertices), std::end(triangleVertices));
 
-    // Add eye (small circle) near the head
-    const float eyeCenterX = -0.03f; // Slightly to the right of the ellipse's center
-    const float eyeCenterY = 0.01f; // Slightly above the center
-    const float eyeRadius = 0.005f; // Small circle for the eye
+    const float eyeCenterX = -0.03f;
+    const float eyeCenterY = 0.01f; 
+    const float eyeRadius = 0.005f;
 
-    // Add eye center
     vertices.push_back(eyeCenterX);
     vertices.push_back(eyeCenterY);
-    vertices.push_back(0.0f);  // R (black eye)
-    vertices.push_back(0.0f);  // G
-    vertices.push_back(0.0f);  // B
+    vertices.push_back(0.0f);  
+    vertices.push_back(0.0f);  
+    vertices.push_back(0.0f); 
 
-    // Generate eye outline vertices
     for (int i = 0; i <= segments; ++i) {
         float angle = (2.0f * 3.1456 * i) / segments;
         float x = eyeCenterX + eyeRadius * cos(angle);
@@ -93,12 +102,11 @@ void Fish::setupVertices()
 
         vertices.push_back(x);
         vertices.push_back(y);
-        vertices.push_back(0.0f);  // R (black eye)
-        vertices.push_back(0.0f);  // G
-        vertices.push_back(0.0f);  // B
+        vertices.push_back(0.0f);  
+        vertices.push_back(0.0f);  
+        vertices.push_back(0.0f);  
     }
 
-    // Set up VBO and VAO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -107,11 +115,9 @@ void Fish::setupVertices()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // Position attribute
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Color attribute
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
@@ -126,11 +132,13 @@ void Fish::createAndLoadShader()
         layout(location = 1) in vec3 color;
 
         uniform vec2 fishPos; // Position offset
+        uniform float flipDirection; // Flip the fish
+
         out vec3 fragColor;
 
         void main() {
             fragColor = color;
-            gl_Position = vec4(position.x + fishPos.x, position.y + fishPos.y, 0.0f, 1.0f);
+            gl_Position = vec4(position.x * flipDirection + fishPos.x, position.y + fishPos.y, 0.0f, 1.0f);
         }
     )";
 

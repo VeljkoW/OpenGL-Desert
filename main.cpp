@@ -94,7 +94,7 @@ int main(void)
     Oasis oasis = Oasis();
     GrassBlades grassBlades = GrassBlades();
 
-    Fish fish = Fish(-0.4f,-0.47f);
+    Fish fish = Fish(-0.5f,-0.48f);
     OasisSurface oasisSurface = OasisSurface();
 
     float aspectRatio = static_cast<float>(wWidth) / static_cast<float>(wHeight);
@@ -195,7 +195,7 @@ int main(void)
         {
             grassBed.setAlpha(0.0f);
             grassBlades.setAlpha(0.0f);
-            oasisSurface.setAlpha(0.3f);
+            oasisSurface.setAlpha(0.5f);
         }
         if (glfwGetKey(window, GLFW_KEY_2) == GLFW_PRESS)
         {
@@ -223,6 +223,7 @@ int main(void)
         sand.render();
         grassBed.render();
         oasis.render();
+        fish.updatePosition(deltaTime);
         fish.render();
         oasisSurface.render();
 
