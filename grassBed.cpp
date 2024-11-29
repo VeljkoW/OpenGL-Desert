@@ -4,29 +4,26 @@
 
 GrassBed::GrassBed() : alpha(1.0f)
 {
-    const int numSegments = 100; // Higher for smoother ellipse
-    const float centerX = -0.5f; // Center in the bottom-left quadrant
+    const int numSegments = 100; 
+    const float centerX = -0.5f; 
     const float centerY = -0.5f;
-    const float radiusX = 0.5f;  // Horizontal radius (larger)
-    const float radiusY = 0.25f;  // Vertical radius (larger)
+    const float radiusX = 0.5f;  
+    const float radiusY = 0.25f;  
 
-    // Create vertices for the ellipse
     std::vector<float> vertices;
     for (int i = 0; i <= numSegments; ++i) {
         float angle = 2.0f * 3.1415926535897932384 * i / numSegments;
         float x = centerX + radiusX * cos(angle);
         float y = centerY + radiusY * sin(angle);
 
-        // Add position (x, y) and color (green, for grass)
         vertices.push_back(x);
         vertices.push_back(y);
-        vertices.push_back(0.0f); // R (darker green)
-        vertices.push_back(0.5f); // G (darker green)
-        vertices.push_back(0.0f); // B (green)
+        vertices.push_back(0.0f); 
+        vertices.push_back(0.5f); 
+        vertices.push_back(0.0f); 
     }
     createAndLoadShader();
 
-    // Set up VAO and VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -35,11 +32,9 @@ GrassBed::GrassBed() : alpha(1.0f)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // Vertex positions
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Vertex colors
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
@@ -55,10 +50,10 @@ GrassBed::~GrassBed()
 void GrassBed::render()
 {
     glUseProgram(shader);
-    glUniform1f(alphaLoc, alpha); // Pass alpha value to shader
+    glUniform1f(alphaLoc, alpha);
 
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLE_FAN, 0, 101); // 100 segments + center
+    glDrawArrays(GL_TRIANGLE_FAN, 0, 101); 
     glBindVertexArray(0);
     glUseProgram(0);
 }

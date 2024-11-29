@@ -64,7 +64,7 @@ void Moon::render() {
 
 void Moon::createMoonVertices() {
     for (int i = 0; i <= numSegments; ++i) {
-        float angle = (i * 1.85f * 3.14159f) / numSegments;
+        float angle = (i * 2.0f * 3.14159f) / numSegments;
         float x = cos(angle) * radius;
         float y = sin(angle) * radius;
 

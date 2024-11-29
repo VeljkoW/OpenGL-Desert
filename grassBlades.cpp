@@ -6,46 +6,40 @@ GrassBlades::GrassBlades() : alpha(1.0f)
 {
     createAndLoadShader();
 
-    // Define ellipse parameters (from oasis)
-    const int numSegments = 50; // Number of grass blades
-    const float centerX = -0.5f; // Center of the ellipse
+    const int numSegments = 50; 
+    const float centerX = -0.5f; 
     const float centerY = -0.5f;
-    const float radiusX = 0.4f;  // Horizontal radius of the ellipse
-    const float radiusY = 0.2f;  // Vertical radius of the ellipse
-    const float grassHeight = 0.2f; // Height of each blade
+    const float radiusX = 0.4f;  
+    const float radiusY = 0.2f;  
+    const float grassHeight = 0.2f; 
 
     std::vector<float> vertices;
 
-    // Loop through the bottom half of the ellipse (from π to 2π)
     for (int i = 0; i < numSegments; ++i) {
-        // Calculate angle from π to 2π (for the entire bottom half of the ellipse)
-        float angle = 3.1415926535897932384f + (i * (3.1415926535897932384f) / (numSegments - 1)); // From π to 2π
+        float angle = 3.1415926535897932384f + (i * (3.1415926535897932384f) / (numSegments - 1)); 
 
-        // Calculate x and y for the ellipse position
         float x = centerX + radiusX * cos(angle);
         float y = centerY + radiusY * sin(angle);
 
-        // Generate a blade of grass (a small triangle)
-        vertices.push_back(x - 0.01f);   // Base-left of the blade
+        vertices.push_back(x - 0.01f);   
         vertices.push_back(y);
-        vertices.push_back(0.0f);        // R
-        vertices.push_back(0.8f);        // G (green grass)
-        vertices.push_back(0.0f);        // B
+        vertices.push_back(0.0f);        
+        vertices.push_back(0.8f);        
+        vertices.push_back(0.0f);        
 
-        vertices.push_back(x);           // Tip of the blade
+        vertices.push_back(x);           
         vertices.push_back(y + grassHeight);
         vertices.push_back(0.0f);
         vertices.push_back(0.8f);
         vertices.push_back(0.0f);
 
-        vertices.push_back(x + 0.01f);   // Base-right of the blade
+        vertices.push_back(x + 0.01f);  
         vertices.push_back(y);
         vertices.push_back(0.0f);
         vertices.push_back(0.8f);
         vertices.push_back(0.0f);
     }
 
-    // Set up VAO and VBO
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -54,11 +48,9 @@ GrassBlades::GrassBlades() : alpha(1.0f)
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
 
-    // Vertex positions
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    // Vertex colors
     glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
@@ -75,11 +67,10 @@ void GrassBlades::render()
 {
     glUseProgram(shader);
 
-    // Set the alpha value
     glUniform1f(alphaLoc, alpha);
 
     glBindVertexArray(VAO);
-    glDrawArrays(GL_TRIANGLES, 0, 150); // 50 blades * 3 vertices each
+    glDrawArrays(GL_TRIANGLES, 0, 150); 
     glBindVertexArray(0);
 
     glUseProgram(0);
