@@ -1,4 +1,4 @@
-#define _CRT_SECURE_NO_WARNINGS
+﻿#define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -16,13 +16,22 @@
 #include "grassBed.h"
 #include "fish.h"
 #include "oasisSurface.h"
+#include "text.h"
+#include "entrance.h"
 
 std::vector<std::unique_ptr<Star>> stars;
 
-float calculateDeltaTime();
 void createStars(int numberOfStars);
 void updateStars(float deltaTime, float skyR, float skyG, float skyB);
 void renderStars();
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+bool isPointInEntrance(float x, float y, const std::vector<std::pair<float, float>>& polygon);
+
+float lastFrameTime = 0.0f;
+const float FPS = 60.0f;
+const float FRAME_TIME = 1.0f / FPS;
+
+bool entranceClicked = false;
 
 int main(void)
 {
@@ -76,12 +85,12 @@ int main(void)
     else {
         std::cerr << "Failed to retrieve OpenGL version" << std::endl;
     }
-
+    glfwSetMouseButtonCallback(window, mouse_button_callback);
 
     Sand sand("sand.jpg");
 
     Pyramid pyramid1("brick.jpg", 0.35f, 0.4f, 0.5f, -0.1f);
-    Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);  
+    Pyramid pyramid2("brick.jpg", 0.30f, 0.32f, 0.8f, -0.3f);
     Pyramid pyramid3("brick.jpg", 0.27f, 0.3f, 0.46f, -0.5f); 
 
     bool isDay = true;
@@ -101,9 +110,33 @@ int main(void)
 
     createStars(15);
 
+
+    Text NameAndIndex = Text("Movistar Text Regular.ttf", "text.vert", "text.frag", 20);
+
+    Text EntranceText = Text("Movistar Text Regular.ttf", "text.vert", "text.frag", 10);
+    
+    float EntranceTextTimer = 0.0f;
+
+    Entrance entrance1(0.35f, 0.4f, 0.5f, -0.1f);
+    Entrance entrance2(0.30f, 0.32f, 0.8f, -0.3f);
+    Entrance entrance3(0.27f, 0.3f, 0.46f, -0.5f);
+
     while (!glfwWindowShouldClose(window)) 
     {
-        float deltaTime = calculateDeltaTime();
+        float currentFrameTime = glfwGetTime();
+        float deltaTime = currentFrameTime - lastFrameTime;
+        lastFrameTime = currentFrameTime;
+        float frameTime = FRAME_TIME;
+
+        if (deltaTime < frameTime) {
+            glfwWaitEventsTimeout(frameTime - deltaTime);
+            currentFrameTime = glfwGetTime();
+            deltaTime = currentFrameTime - lastFrameTime;
+
+        }
+        lastFrameTime = currentFrameTime;
+
+
         if (isDay && sun.getSpeed() != 0.0f) {
             sun.update(deltaTime, aspectRatio,isDay);
 
@@ -234,20 +267,128 @@ int main(void)
         pyramid3.render(window,false);
 
 
+        if (glfwGetKey(window, GLFW_KEY_O) == GLFW_PRESS)
+        {
+            entrance1.setAnimationStarted(true);
+            entrance2.setAnimationStarted(true);
+            entrance3.setAnimationStarted(true);
+        }
+
+        entrance1.render();
+        entrance2.render();
+        entrance3.render();
+
+        NameAndIndex.RenderText("Veljko Vulin RA69/2021", 0.0f, 10.0f, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f));
+
+        if (entranceClicked)
+        {
+            EntranceTextTimer += 0.05f;
+            //Nastaviće
+            EntranceText.RenderText("N", 0.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            if (EntranceTextTimer > 1.0f)
+            {
+                EntranceText.RenderText("a", 9.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 2.0f)
+            {
+                EntranceText.RenderText("s", 18.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 3.0f)
+            {
+                EntranceText.RenderText("t", 27.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 4.0f)
+            {
+                EntranceText.RenderText("a", 36.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 5.0f)
+            {
+                EntranceText.RenderText("v", 45.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 6.0f)
+            {
+                EntranceText.RenderText("i", 54.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 7.0f)
+            {
+                EntranceText.RenderText("ć", 63.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 8.0f)
+            {
+                EntranceText.RenderText("e", 72.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+
+            //se
+            if (EntranceTextTimer > 9.0f)
+            {
+                EntranceText.RenderText("s", 90.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 10.0f)
+            {
+                EntranceText.RenderText("e", 99.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            //na
+            if (EntranceTextTimer > 11.0f)
+            {
+                EntranceText.RenderText("n", 117.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 12.0f)
+            {
+                EntranceText.RenderText("a", 126.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            //3D
+            if (EntranceTextTimer > 13.0f)
+            {
+                EntranceText.RenderText("3", 144.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 14.0f)
+            {
+                EntranceText.RenderText("D", 153.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            //projektu
+            if (EntranceTextTimer > 15.0f)
+            {
+                EntranceText.RenderText("p", 171.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 16.0f)
+            {
+                EntranceText.RenderText("r", 180.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 17.0f)
+            {
+                EntranceText.RenderText("o", 189.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 18.0f)
+            {
+                EntranceText.RenderText("j", 198.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 19.0f)
+            {
+                EntranceText.RenderText("e", 207.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 20.0f)
+            {
+                EntranceText.RenderText("k", 216.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 21.0f)
+            {
+                EntranceText.RenderText("t", 225.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+            if (EntranceTextTimer > 22.0f)
+            {
+                EntranceText.RenderText("u", 234.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            }
+
+            
+        }
+
+
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
     glfwTerminate();
     return 0;
-}
-
-float calculateDeltaTime() {
-    static float lastFrameTime = 0.0f;
-    float currentFrameTime = glfwGetTime();
-    float deltaTime = currentFrameTime - lastFrameTime;
-    lastFrameTime = currentFrameTime;
-    return deltaTime; 
 }
 
 void createStars(int numberOfStars) {
@@ -270,4 +411,76 @@ void renderStars() {
     for (const auto& star : stars) {
         star->render();  
     }
+}
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
+    if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
+        double xpos, ypos;
+        glfwGetCursorPos(window, &xpos, &ypos); // Get the mouse cursor position
+
+        // Convert the mouse coordinates to OpenGL coordinates
+        int windowWidth, windowHeight;
+        glfwGetWindowSize(window, &windowWidth, &windowHeight);
+
+        xpos = (xpos / windowWidth) * 2.0f - 1.0f; // Convert to OpenGL coordinates (-1 to 1 range)
+        ypos = -((ypos / windowHeight) * 2.0f - 1.0f); // Convert to OpenGL coordinates (-1 to 1 range)
+
+        // Print the mouse position in OpenGL coordinates
+        std::cout << "Mouse Clicked at OpenGL Coordinates: (" << xpos << ", " << ypos << ")\n";
+
+
+        std::vector<std::pair<float, float>> entrance1Vertices = {
+            {0.370833f, -0.118519f},  // Bottom-left
+            {0.455208f, -0.159259f},  // Bottom-right
+            {0.455208f,  0.0333333f}, // Top-right
+            {0.429167f,  0.0481481f}  // Top-left
+        };
+        std::vector<std::pair<float, float>> entrance2Vertices = {
+            {0.689583f, -0.316667f},  // Bottom-left
+            {0.761458f, -0.353704f},  // Bottom-right
+            {0.7625f,   -0.198148f},  // Top-right
+            {0.747917f, -0.188889f}   // Top-left
+        };
+        std::vector<std::pair<float, float>> entrance3Vertices = {
+            {0.360417f, -0.516667f},  // Bottom-left
+            {0.425f,    -0.544444f},  // Bottom-right
+            {0.426042f, -0.401852f},  // Top-right
+            {0.41875f,  -0.398148f}   // Top-left
+        };
+
+        if (isPointInEntrance(xpos, ypos, entrance1Vertices)) {
+            entranceClicked = true;
+            std::cout << "Entrance 1 clicked!\n";
+        }
+        else if (isPointInEntrance(xpos, ypos, entrance2Vertices)) {
+            entranceClicked = true;
+            std::cout << "Entrance 2 clicked!\n";
+        }
+        else if (isPointInEntrance(xpos, ypos, entrance3Vertices)) {
+            entranceClicked = true;
+            std::cout << "Entrance 3 clicked!\n";
+        }
+
+    }
+}
+bool isPointInEntrance(float x, float y, const std::vector<std::pair<float, float>>& polygon)   //RAY CASTING ALGORITHM
+{
+    int intersectionCount = 0; // Count of intersections with polygon edges
+    int vertexCount = polygon.size();
+
+    for (int i = 0; i < vertexCount; ++i) {
+        // Current vertex and the next vertex (wrapping around at the end)
+        float x1 = polygon[i].first;
+        float y1 = polygon[i].second;
+        float x2 = polygon[(i + 1) % vertexCount].first;
+        float y2 = polygon[(i + 1) % vertexCount].second;
+
+        // Check if the ray intersects with the edge
+        if (((y1 > y) != (y2 > y)) &&  // Check if the y-coordinate of the point is within the vertical range of the edge
+            (x < (x2 - x1) * (y - y1) / (y2 - y1) + x1)) { // Calculate intersection point's x and check if it's to the right of the point
+            intersectionCount++;
+        }
+    }
+
+    // If the number of intersections is odd, the point is inside
+    return (intersectionCount % 2) == 1;
 }
