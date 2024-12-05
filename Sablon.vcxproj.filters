@@ -51,13 +51,19 @@
     <ClCompile Include="oasisSurface.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="text.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="entrance.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="basic.frag">
+    <None Include="text.frag">
       <Filter>Source Files\Shader Files</Filter>
     </None>
-    <None Include="basic.vert">
+    <None Include="text.vert">
       <Filter>Source Files\Shader Files</Filter>
     </None>
   </ItemGroup>
@@ -95,6 +101,12 @@
     <ClInclude Include="oasisSurface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="text.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="entrance.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="sand.jpg">
@@ -103,5 +115,10 @@
     <Image Include="..\brick.jpg">
       <Filter>Resource Files</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="Movistar Text Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
   </ItemGroup>
 </Project>
