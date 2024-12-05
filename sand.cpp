@@ -8,10 +8,10 @@ Sand::Sand(const std::string& texturePath) {
 
     float vertices[] = {
         // Positions           // Texture Coords
-        -1.0f, -1.0f, 0.0f,    0.0f, 0.0f, // Bottom-left
-         1.0f, -1.0f, 0.0f,    1.0f, 0.0f, // Bottom-right
-         1.0f,  0.0f, 0.0f,   1.0f, 1.0f, // Top-right
-        -1.0f,  0.0f, 0.0f,   0.0f, 1.0f  // Top-left
+        -1.0f, -1.0f,    0.0f, 0.0f, // Bottom-left
+         1.0f, -1.0f,    1.0f, 0.0f, // Bottom-right
+         1.0f,  0.0f,    1.0f, 1.0f, // Top-right
+        -1.0f,  0.0f,    0.0f, 1.0f  // Top-left
     };
 
     glGenVertexArrays(1, &VAO);
@@ -23,11 +23,11 @@ Sand::Sand(const std::string& texturePath) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Texture coordinate attribute
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -102,7 +102,7 @@ void Sand::createAndLoadShader()
         out vec2 chTex;
         void main()
         {
-	        gl_Position = vec4(inPos.x, inPos.y, 0.0, 1.0);
+	        gl_Position = vec4(inPos, 0.0, 1.0);
 	        chTex = inTex;
         }
     )";

@@ -10,17 +10,17 @@ Pyramid::Pyramid(const std::string& texturePath, float baseWidth, float height, 
 
     float vertices[] = {
         // First triangle (Left side of the pyramid)
-        -baseWidth / 2.0f,  0.0f,   0.0f,    0.0f, 0.0f,  // Bottom-left
-        0.0f,               -baseWidth / 4.0f, baseWidth / 4.0f,    1.0f, 0.0f,  // Bottom-right lowered
-        0.0f,               height,   0.0f,    0.5f, 1.0f,  // Top (apex)
+        -baseWidth / 2.0f,  0.0f,                  0.0f, 0.0f,  // Bottom-left
+        0.0f,               -baseWidth / 4.0f,     1.0f, 0.0f,  // Bottom-right lowered
+        0.0f,               height,                0.5f, 1.0f,  // Top (apex)
 
         // Second triangle (Right side of the pyramid)
-        0.0f,               -baseWidth / 4.0f, baseWidth / 4.0f,    0.0f, 0.0f,  // Bottom-left lowered
-        baseWidth / 2.0f,    0.0f,   0.0f,    1.0f, 0.0f,  // Bottom-right
-        0.0f,               height,   0.0f,    0.5f, 1.0f   // Top (apex)
+        0.0f,                -baseWidth / 4.0f,     0.0f, 0.0f,  // Bottom-left lowered
+        baseWidth / 2.0f,    0.0f,                  1.0f, 0.0f,  // Bottom-right
+        0.0f,                height,                0.5f, 1.0f   // Top (apex)
     };
     
-    for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 5) {
+    for (int i = 0; i < sizeof(vertices) / sizeof(vertices[0]); i += 4) {
         vertices[i] += xPos; 
         vertices[i + 1] += yPos;  
     }
@@ -36,11 +36,11 @@ Pyramid::Pyramid(const std::string& texturePath, float baseWidth, float height, 
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // Position attribute (x, y)
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
     // Texture coordinate attribute (u, v)
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -137,12 +137,12 @@ void Pyramid::loadImageToTexture(const std::string& texturePath) {
 void Pyramid::createAndLoadShader() {
     const char* vertex = R"(
         #version 330 
-        layout(location = 0) in vec3 inPos;
+        layout(location = 0) in vec2 inPos;
         layout(location = 1) in vec2 inTex;
         out vec2 chTex;
         void main()
         {
-            gl_Position = vec4(inPos.x, inPos.y, 0.0, 1.0);
+            gl_Position = vec4(inPos, 0.0, 1.0);
             chTex = inTex;
         }
     )";
@@ -153,18 +153,15 @@ void Pyramid::createAndLoadShader() {
         out vec4 outCol;
 
         uniform sampler2D uTex;
-        uniform float progress;  // Add a uniform for progress
+        uniform float progress;  
 
         void main()
         {
             vec4 textureColor = texture(uTex, chTex);
 
-            // Only apply the red color on the left triangle initially and extend to the right triangle later
             if (chTex.x < progress) {
-                // If we're in the left triangle and progress has started, color red
-                outCol = vec4(1.0, 0.0, 0.0, 1.0);  // Red for stripe
+                outCol = vec4(1.0, 0.0, 0.0, 1.0); 
             } else {
-                // Original texture color (right triangle or beyond progress)
                 outCol = textureColor;
             }
         }
