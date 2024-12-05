@@ -111,7 +111,7 @@ void GrassBlades::createAndLoadShader()
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        std::cerr << "Vertex Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Grass blades vertex Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -121,7 +121,7 @@ void GrassBlades::createAndLoadShader()
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        std::cerr << "Fragment Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Grass blades fragment Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     shader = glCreateProgram();
@@ -132,7 +132,7 @@ void GrassBlades::createAndLoadShader()
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Shader Linking Error:\n" << infoLog << std::endl;
+        std::cerr << "Grass blades shader Linking Error:\n" << infoLog << std::endl;
     }
 
     glDeleteShader(vertexShader);

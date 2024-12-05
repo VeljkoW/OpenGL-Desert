@@ -38,13 +38,13 @@ void Sun::update(float deltaTime, float aspectRatio,bool isDay)
         posX = 1.0f + radius; 
     }
 
-    float waveAmplitude = 0.15f;  
+    float waveAmplitude = 0.3f;  
     float waveWidth = 4.0f;       
     float centerScreen = 0.6f;   
 
     float normalizedX = (posX + 1.0f) * 3.14159f / 2.0f; 
 
-    posY = centerScreen + waveAmplitude * sin(normalizedX);
+    posY = centerScreen + waveAmplitude * sin(normalizedX) - 0.1f;
 
     for (int i = 0; i <= numSegments; ++i) {
         float angle = i * 2.0f * 3.14159f / numSegments;
@@ -116,7 +116,7 @@ void Sun::createAndLoadShader()
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        std::cerr << "Sand vertex Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Sun vertex Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -126,7 +126,7 @@ void Sun::createAndLoadShader()
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        std::cerr << "Sand fragment Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Sun fragment Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     shader = glCreateProgram();
@@ -137,7 +137,7 @@ void Sun::createAndLoadShader()
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Sand shader Linking Error:\n" << infoLog << std::endl;
+        std::cerr << "Sun shader Linking Error:\n" << infoLog << std::endl;
     }
 
     glDeleteShader(vertexShader);

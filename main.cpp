@@ -111,9 +111,9 @@ int main(void)
     createStars(15);
 
 
-    Text NameAndIndex = Text("Movistar Text Regular.ttf", "text.vert", "text.frag", 20);
+    Text NameAndIndex = Text("Movistar Text Regular.ttf", 20);
 
-    Text EntranceText = Text("Movistar Text Regular.ttf", "text.vert", "text.frag", 10);
+    Text EntranceText = Text("Korela Serif.otf", 15);
     
     float EntranceTextTimer = 0.0f;
 
@@ -140,23 +140,23 @@ int main(void)
         if (isDay && sun.getSpeed() != 0.0f) {
             sun.update(deltaTime, aspectRatio,isDay);
 
-            if (sun.getPosX() > -0.75f - sun.getRadius())
+            if (sun.getPosX() > -0.70f - sun.getRadius())
             {
-                skyR = std::max(0.0f, skyR - 0.001f);
-                skyG = std::min(0.6f, skyG + 0.001f);
-                skyB = std::min(1.0f, skyB + 0.001f);
+                skyR = std::max(0.0f, skyR - 0.003f);
+                skyG = std::min(0.6f, skyG + 0.003f);
+                skyB = std::min(1.0f, skyB + 0.003f);
             }
             else if (sun.getPosX() > -0.97f - sun.getRadius())
             {
-                skyR = std::min(247.0f / 255.0f, skyR + 0.004f);  
-                skyG = std::min(147.0f / 255.0f, skyG + 0.003f);  
-                skyB = std::max(114.0f / 255.0f, skyB - 0.003f);
+                skyR = std::min(247.0f / 255.0f, skyR + 0.007f);  
+                skyG = std::min(147.0f / 255.0f, skyG + 0.006f);  
+                skyB = std::max(114.0f / 255.0f, skyB - 0.006f);
             }
             else
             {
-                skyR = std::max(0.0f, skyR - 0.004f);
-                skyG = std::max(0.0f, skyG - 0.003f);
-                skyB = std::max(0.0f, skyB - 0.003f);
+                skyR = std::max(0.0f, skyR - 0.007f);
+                skyG = std::max(0.0f, skyG - 0.006f);
+                skyB = std::max(0.0f, skyB - 0.006f);
             }
             if (sun.getPosX() < -1.0f - sun.getRadius())
             {
@@ -171,15 +171,15 @@ int main(void)
 
             if (moon.getPosX() > -0.88 - moon.getRadius())
             {
-                skyR = std::max(0.0f, skyR - 0.004f);
-                skyG = std::max(0.0f, skyG - 0.003f);
-                skyB = std::max(0.0f, skyB - 0.003f);
+                skyR = std::max(0.0f, skyR - 0.007f);
+                skyG = std::max(0.0f, skyG - 0.006f);
+                skyB = std::max(0.0f, skyB - 0.006f);
             }
             else
             {
-                skyR = std::max(0.0f, skyR - 0.001f);
-                skyG = std::min(0.6f, skyG + 0.001f);
-                skyB = std::min(1.0f, skyB + 0.001f);
+                skyR = std::max(0.0f, skyR - 0.003f);
+                skyG = std::min(0.6f, skyG + 0.003f);
+                skyB = std::min(1.0f, skyB + 0.003f);
             }
 
             if (moon.getPosX() < -1.0f - moon.getRadius()) {
@@ -278,105 +278,106 @@ int main(void)
         entrance2.render();
         entrance3.render();
 
-        NameAndIndex.RenderText("Veljko Vulin RA69/2021", 0.0f, 10.0f, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f));
+        NameAndIndex.Render("Veljko Vulin RA69/2021", 0.0f, 10.0f, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f));
 
         if (entranceClicked)
         {
             EntranceTextTimer += 0.05f;
             //Nastaviće
-            EntranceText.RenderText("N", 0.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            EntranceText.Render("N", 0.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             if (EntranceTextTimer > 1.0f)
             {
-                EntranceText.RenderText("a", 9.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("a", 9.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 2.0f)
             {
-                EntranceText.RenderText("s", 18.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("s", 18.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 3.0f)
             {
-                EntranceText.RenderText("t", 27.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("t", 27.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 4.0f)
             {
-                EntranceText.RenderText("a", 36.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("a", 36.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 5.0f)
             {
-                EntranceText.RenderText("v", 45.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("v", 45.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 6.0f)
             {
-                EntranceText.RenderText("i", 54.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("i", 54.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 7.0f)
             {
-                EntranceText.RenderText("ć", 63.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("c", 63.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render(",", 65.0f, 509.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 8.0f)
             {
-                EntranceText.RenderText("e", 72.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("e", 72.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
 
             //se
             if (EntranceTextTimer > 9.0f)
             {
-                EntranceText.RenderText("s", 90.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("s", 90.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 10.0f)
             {
-                EntranceText.RenderText("e", 99.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("e", 99.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             //na
             if (EntranceTextTimer > 11.0f)
             {
-                EntranceText.RenderText("n", 117.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("n", 117.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 12.0f)
             {
-                EntranceText.RenderText("a", 126.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("a", 126.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             //3D
             if (EntranceTextTimer > 13.0f)
             {
-                EntranceText.RenderText("3", 144.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("3", 144.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 14.0f)
             {
-                EntranceText.RenderText("D", 153.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("D", 153.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             //projektu
             if (EntranceTextTimer > 15.0f)
             {
-                EntranceText.RenderText("p", 171.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("p", 171.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 16.0f)
             {
-                EntranceText.RenderText("r", 180.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("r", 180.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 17.0f)
             {
-                EntranceText.RenderText("o", 189.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("o", 189.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 18.0f)
             {
-                EntranceText.RenderText("j", 198.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("j", 198.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 19.0f)
             {
-                EntranceText.RenderText("e", 207.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("e", 207.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 20.0f)
             {
-                EntranceText.RenderText("k", 216.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("k", 216.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 21.0f)
             {
-                EntranceText.RenderText("t", 225.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("t", 225.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
             if (EntranceTextTimer > 22.0f)
             {
-                EntranceText.RenderText("u", 234.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                EntranceText.Render("u", 234.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
             }
 
             

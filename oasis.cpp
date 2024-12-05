@@ -92,7 +92,7 @@ void Oasis::createAndLoadShader()
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
-        std::cerr << "Vertex Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Oasis vertex Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
@@ -102,7 +102,7 @@ void Oasis::createAndLoadShader()
     glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
-        std::cerr << "Fragment Shader Compilation Error:\n" << infoLog << std::endl;
+        std::cerr << "Oasis fragment Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
     shader = glCreateProgram();
@@ -113,7 +113,7 @@ void Oasis::createAndLoadShader()
     glGetProgramiv(shader, GL_LINK_STATUS, &success);
     if (!success) {
         glGetProgramInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Shader Linking Error:\n" << infoLog << std::endl;
+        std::cerr << "Oasis shader Linking Error:\n" << infoLog << std::endl;
     }
 
     glDeleteShader(vertexShader);

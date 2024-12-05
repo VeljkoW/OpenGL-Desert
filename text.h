@@ -2,9 +2,9 @@
 #define TEXT_H
 
 #include <string>
-#include <map>
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <map>
 
 struct Character {
     GLuint TextureID;
@@ -14,20 +14,17 @@ struct Character {
 };
 
 class Text {
-public:
-    Text(const std::string& fontPath, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, int fontSize);
-    ~Text();
+    public:
+        Text(const std::string& fontPath, int fontSize);
+        ~Text();
+        void Render(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
 
-    void RenderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color);
-
-private:
-    unsigned int compileShader(GLenum type, const std::string& source);
-    unsigned int createShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath);
-    void loadCharacters(const std::string& fontPath, int fontSize);
-
-    unsigned int shaderProgram;
-    unsigned int VAO, VBO;
-    std::map<char, Character> Characters;
+    private:
+        GLuint VAO, VBO;
+        GLuint shader;
+        void createShaderAndLoadShader();
+        void loadCharacters(const std::string& fontPath, int fontSize);
+        std::map<char, Character> Characters;
 };
 
 #endif
