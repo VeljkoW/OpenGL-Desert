@@ -140,23 +140,23 @@ int main(void)
         if (isDay && sun.getSpeed() != 0.0f) {
             sun.update(deltaTime, aspectRatio,isDay);
 
-            if (sun.getPosX() > -0.75f - sun.getRadius())
+            if (sun.getPosX() > -0.70f - sun.getRadius())
             {
-                skyR = std::max(0.0f, skyR - 0.001f);
-                skyG = std::min(0.6f, skyG + 0.001f);
-                skyB = std::min(1.0f, skyB + 0.001f);
+                skyR = std::max(0.0f, skyR - 0.003f);
+                skyG = std::min(0.6f, skyG + 0.003f);
+                skyB = std::min(1.0f, skyB + 0.003f);
             }
             else if (sun.getPosX() > -0.97f - sun.getRadius())
             {
-                skyR = std::min(247.0f / 255.0f, skyR + 0.004f);  
-                skyG = std::min(147.0f / 255.0f, skyG + 0.003f);  
-                skyB = std::max(114.0f / 255.0f, skyB - 0.003f);
+                skyR = std::min(247.0f / 255.0f, skyR + 0.007f);  
+                skyG = std::min(147.0f / 255.0f, skyG + 0.006f);  
+                skyB = std::max(114.0f / 255.0f, skyB - 0.006f);
             }
             else
             {
-                skyR = std::max(0.0f, skyR - 0.004f);
-                skyG = std::max(0.0f, skyG - 0.003f);
-                skyB = std::max(0.0f, skyB - 0.003f);
+                skyR = std::max(0.0f, skyR - 0.007f);
+                skyG = std::max(0.0f, skyG - 0.006f);
+                skyB = std::max(0.0f, skyB - 0.006f);
             }
             if (sun.getPosX() < -1.0f - sun.getRadius())
             {
@@ -171,15 +171,15 @@ int main(void)
 
             if (moon.getPosX() > -0.88 - moon.getRadius())
             {
-                skyR = std::max(0.0f, skyR - 0.004f);
-                skyG = std::max(0.0f, skyG - 0.003f);
-                skyB = std::max(0.0f, skyB - 0.003f);
+                skyR = std::max(0.0f, skyR - 0.007f);
+                skyG = std::max(0.0f, skyG - 0.006f);
+                skyB = std::max(0.0f, skyB - 0.006f);
             }
             else
             {
-                skyR = std::max(0.0f, skyR - 0.001f);
-                skyG = std::min(0.6f, skyG + 0.001f);
-                skyB = std::min(1.0f, skyB + 0.001f);
+                skyR = std::max(0.0f, skyR - 0.003f);
+                skyG = std::min(0.6f, skyG + 0.003f);
+                skyB = std::min(1.0f, skyB + 0.003f);
             }
 
             if (moon.getPosX() < -1.0f - moon.getRadius()) {
