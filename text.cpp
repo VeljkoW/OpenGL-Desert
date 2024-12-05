@@ -1,26 +1,20 @@
-#include "text.h"
+﻿#include "text.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
-#include <iostream>
-#include <fstream>
-#include <sstream>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
-Text::Text(const std::string& fontPath, const std::string& vertexShaderPath, const std::string& fragmentShaderPath, int fontSize) {
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
-    // Kreiraj �ejder program
-    shaderProgram = createShader(vertexShaderPath, fragmentShaderPath);
+Text::Text(const std::string& fontPath,int fontSize) {
 
-
-
-    // U?itaj karaktere iz fonta
+    createShaderAndLoadShader();
     loadCharacters(fontPath, fontSize);
-
-    // Kreiraj VAO i VBO za renderovanje teksta
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
-    std::cout << "VAO: " << VAO << ", VBO: " << VBO << std::endl;
+
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 6 * 4, nullptr, GL_DYNAMIC_DRAW);
@@ -33,61 +27,63 @@ Text::Text(const std::string& fontPath, const std::string& vertexShaderPath, con
 Text::~Text() {
     glDeleteVertexArrays(1, &VAO);
     glDeleteBuffers(1, &VBO);
-    glDeleteProgram(shaderProgram);
+    glDeleteProgram(shader);
 }
+void Text::Render(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color) {
+    glUseProgram(shader);
 
-unsigned int Text::compileShader(GLenum type, const std::string& source) {
-    unsigned int shader = glCreateShader(type);
-    const char* src = source.c_str();
-    glShaderSource(shader, 1, &src, nullptr);
-    glCompileShader(shader);
+    float width = 800.0f;
+    float height = 800.0f;
 
-    int success;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
-    if (!success) {
-        char infoLog[512];
-        glGetShaderInfoLog(shader, 512, nullptr, infoLog);
-        std::cerr << "Shader compilation failed:\n" << infoLog << std::endl;
+    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 800.0f, -1.0f, 1.0f);
+    GLint projLoc = glGetUniformLocation(shader, "projection");
+
+    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+
+    glUniform3f(glGetUniformLocation(shader, "textColor"), color.x, color.y, color.z);
+    glActiveTexture(GL_TEXTURE0);
+    glBindVertexArray(VAO);
+
+    for (const char& c : text) {
+
+        if (Characters.find(c) == Characters.end()) {
+            std::cerr << "WARNING::TEXT_RENDERER: Character '" << c
+                << "' (ASCII: " << static_cast<int>(c) << ") not found in Characters map." << std::endl;
+            continue;
+        }
+
+        Character ch = Characters[c];
+
+        GLfloat xpos = x + ch.Bearing.x * scale;
+        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+
+        GLfloat w = ch.Size.x * scale;
+        GLfloat h = ch.Size.y * scale;
+
+        GLfloat vertices[6][4] = {
+            { xpos,     ypos + h, 0.0f, 0.0f },
+            { xpos,     ypos,     0.0f, 1.0f },
+            { xpos + w, ypos,     1.0f, 1.0f },
+
+            { xpos,     ypos + h, 0.0f, 0.0f },
+            { xpos + w, ypos,     1.0f, 1.0f },
+            { xpos + w, ypos + h, 1.0f, 0.0f }
+        };
+
+        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        x += (ch.Advance >> 6) * scale;
     }
 
-    return shader;
+    glBindVertexArray(0);
+    glUseProgram(0);
 }
-
-unsigned int Text::createShader(const std::string& vertexShaderPath, const std::string& fragmentShaderPath) {
-    std::ifstream vsFile(vertexShaderPath);
-    std::ifstream fsFile(fragmentShaderPath);
-
-    if (!vsFile.is_open() || !fsFile.is_open()) {
-        std::cerr << "Failed to load shader files: " << vertexShaderPath << ", " << fragmentShaderPath << std::endl;
-        return 0;
-    }
-
-    std::stringstream vsStream, fsStream;
-    vsStream << vsFile.rdbuf();
-    fsStream << fsFile.rdbuf();
-
-    unsigned int vertexShader = compileShader(GL_VERTEX_SHADER, vsStream.str());
-    unsigned int fragmentShader = compileShader(GL_FRAGMENT_SHADER, fsStream.str());
-
-    unsigned int program = glCreateProgram();
-    glAttachShader(program, vertexShader);
-    glAttachShader(program, fragmentShader);
-    glLinkProgram(program);
-
-    int success;
-    glGetProgramiv(program, GL_LINK_STATUS, &success);
-    if (!success) {
-        char infoLog[512];
-        glGetProgramInfoLog(program, 512, nullptr, infoLog);
-        std::cerr << "Shader program linking failed:\n" << infoLog << std::endl;
-    }
-
-    glDeleteShader(vertexShader);
-    glDeleteShader(fragmentShader);
-
-    return program;
-}
-
 void Text::loadCharacters(const std::string& fontPath, int fontSize) {
     FT_Library ft;
     if (FT_Init_FreeType(&ft)) {
@@ -106,7 +102,9 @@ void Text::loadCharacters(const std::string& fontPath, int fontSize) {
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-    for (unsigned char c = 0; c < 128; c++) {
+    std::wstring charactersToLoad = L"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-/ ćĆ,";
+    for (wchar_t c : charactersToLoad) {
+
         if (FT_Load_Char(face, c, FT_LOAD_RENDER)) {
             std::cerr << "ERROR::FREETYPE: Failed to load Glyph" << std::endl;
             continue;
@@ -140,64 +138,85 @@ void Text::loadCharacters(const std::string& fontPath, int fontSize) {
         };
         Characters.insert(std::pair<char, Character>(c, character));
     }
+    /*
+    if (Characters.find('ć') != Characters.end()) {
+        const Character& ch = Characters['ć'];
+        std::cout << "'ć' loaded: texture ID = " << ch.TextureID
+            << ", size = (" << ch.Size.x << ", " << ch.Size.y << ")"
+            << ", bearing = (" << ch.Bearing.x << ", " << ch.Bearing.y << ")"
+            << ", advance = " << ch.Advance << std::endl;
+    }
+    else {
+        std::cerr << "'ć' not found in Characters map!" << std::endl;
+    }
+    */
 
     FT_Done_Face(face);
     FT_Done_FreeType(ft);
 }
+void Text::createShaderAndLoadShader() {
 
-void Text::RenderText(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color) {
-    glUseProgram(shaderProgram);
+    const char* vertex = R"(
+        #version 330 core
+        layout (location = 0) in vec4 vertex; // (x, y, z, u, v)
 
-    float width = 800.0f;
-    float height = 800.0f;
+        out vec2 TexCoords;
 
-    glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 800.0f, -1.0f, 1.0f);
-    GLint projLoc = glGetUniformLocation(shaderProgram, "projection");
+        uniform mat4 projection;
 
-    glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-
-    glUniform3f(glGetUniformLocation(shaderProgram, "textColor"), color.x, color.y, color.z);
-    glActiveTexture(GL_TEXTURE0);
-    glBindVertexArray(VAO);
-
-    for (const char& c : text) {
-
-        if (Characters.find(c) == Characters.end()) {
-            std::cerr << "WARNING::TEXT_RENDERER: Character '" << c
-                << "' (ASCII: " << static_cast<int>(c) << ") not found in Characters map." << std::endl;
-            continue; // Presko?i karakter
+        void main() {
+            gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);
+            TexCoords = vertex.zw;
         }
+    )";
 
-        Character ch = Characters[c];
+    const char* fragment = R"(
+        #version 330 core
+        in vec2 TexCoords;
+        out vec4 color;
 
-        GLfloat xpos = x + ch.Bearing.x * scale;
-        GLfloat ypos = y - (ch.Size.y - ch.Bearing.y) * scale;
+        uniform sampler2D text;
+        uniform vec3 textColor;
 
-        GLfloat w = ch.Size.x * scale;
-        GLfloat h = ch.Size.y * scale;
+        void main() {
+            vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r); 
+            color = vec4(textColor, 1.0) * sampled;
+        }
+    )";
 
-        GLfloat vertices[6][4] = {
-            { xpos,     ypos + h, 0.0f, 0.0f },
-            { xpos,     ypos,     0.0f, 1.0f },
-            { xpos + w, ypos,     1.0f, 1.0f },
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertex, nullptr);
+    glCompileShader(vertexShader);
 
-            { xpos,     ypos + h, 0.0f, 0.0f },
-            { xpos + w, ypos,     1.0f, 1.0f },
-            { xpos + w, ypos + h, 1.0f, 0.0f }
-        };
-
-
-        glBindTexture(GL_TEXTURE_2D, ch.TextureID);
-
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        x += (ch.Advance >> 6) * scale;
+    GLint success;
+    GLchar infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+        std::cerr << "Text vertex Shader Compilation Error:\n" << infoLog << std::endl;
     }
 
-    glBindVertexArray(0);
-    glUseProgram(0);
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragment, nullptr);
+    glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+        std::cerr << "Text fragment Shader Compilation Error:\n" << infoLog << std::endl;
+    }
+
+    shader = glCreateProgram();
+    glAttachShader(shader, vertexShader);
+    glAttachShader(shader, fragmentShader);
+    glLinkProgram(shader);
+
+    glGetProgramiv(shader, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shader, 512, nullptr, infoLog);
+        std::cerr << "Text shader Linking Error:\n" << infoLog << std::endl;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
 }

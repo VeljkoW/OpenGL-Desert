@@ -97,7 +97,7 @@ void Entrance::render() {
 void Entrance::createAndLoadShader() {
     const char* vertexShaderSource = R"(
         #version 330 core
-        layout(location = 0) in vec3 position;
+        layout(location = 0) in vec2 position;
         void main() {
            gl_Position = vec4(position, 0.0, 1.0);
         }
@@ -116,14 +116,34 @@ void Entrance::createAndLoadShader() {
     glShaderSource(vertexShader, 1, &vertexShaderSource, nullptr);
     glCompileShader(vertexShader);
 
+    GLint success;
+    GLchar infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, nullptr, infoLog);
+        std::cerr << "Entrance vertex Shader Compilation Error:\n" << infoLog << std::endl;
+    }
+
     GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, nullptr);
     glCompileShader(fragmentShader);
+
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, nullptr, infoLog);
+        std::cerr << "Entrance fragment Shader Compilation Error:\n" << infoLog << std::endl;
+    }
 
     shader = glCreateProgram();
     glAttachShader(shader, vertexShader);
     glAttachShader(shader, fragmentShader);
     glLinkProgram(shader);
+
+    glGetProgramiv(shader, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shader, 512, nullptr, infoLog);
+        std::cerr << "Entrance shader Linking Error:\n" << infoLog << std::endl;
+    }
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);

@@ -60,12 +60,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <None Include="text.frag">
-      <Filter>Source Files\Shader Files</Filter>
-    </None>
-    <None Include="text.vert">
-      <Filter>Source Files\Shader Files</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stb_image.h">
@@ -118,6 +112,9 @@
   </ItemGroup>
   <ItemGroup>
     <Font Include="Movistar Text Regular.ttf">
+      <Filter>Resource Files</Filter>
+    </Font>
+    <Font Include="Korela Serif.otf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>
