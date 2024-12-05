@@ -8,7 +8,7 @@
 #include <sstream>
 #include <fstream>
 
-Text::Text(const std::string& fontPath,int fontSize) {
+Text::Text(const std::string& fontPath,int fontSize) : alpha(1.0f) {
 
     createShaderAndLoadShader();
     loadCharacters(fontPath, fontSize);
@@ -41,6 +41,7 @@ void Text::Render(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, 
     glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
     glUniform3f(glGetUniformLocation(shader, "textColor"), color.x, color.y, color.z);
+    glUniform1f(glGetUniformLocation(shader, "alpha"), alpha);
     glActiveTexture(GL_TEXTURE0);
     glBindVertexArray(VAO);
 
@@ -177,10 +178,11 @@ void Text::createShaderAndLoadShader() {
 
         uniform sampler2D text;
         uniform vec3 textColor;
+        uniform float alpha;
 
         void main() {
             vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r); 
-            color = vec4(textColor, 1.0) * sampled;
+            color = vec4(textColor, alpha) * sampled;
         }
     )";
 
@@ -219,4 +221,20 @@ void Text::createShaderAndLoadShader() {
 
     glDeleteShader(vertexShader);
     glDeleteShader(fragmentShader);
+}
+float Text::getAlpha() const {
+    return alpha;
+}
+void Text::reduceAlpha(float reduction) {
+    if (alpha - reduction >= 0.0f)
+    {
+        alpha -= reduction;
+    }
+    else
+    {
+        alpha = 0.0f;
+    }
+}
+void Text::setAlpha(float a) {
+    alpha = a;
 }

@@ -113,8 +113,36 @@ int main(void)
 
     Text NameAndIndex = Text("Movistar Text Regular.ttf", 20);
 
-    Text EntranceText = Text("Korela Serif.otf", 15);
-    
+    std::string fontPath = "Korela Serif.otf";
+    int fontSize = 17;
+    //Let me cook
+    Text N = Text(fontPath, fontSize);
+    Text a = Text(fontPath, fontSize);
+    Text s = Text(fontPath, fontSize);
+    Text t = Text(fontPath, fontSize);
+    Text a2 = Text(fontPath, fontSize);
+    Text v = Text(fontPath, fontSize);
+    Text i = Text(fontPath, fontSize);
+    Text c = Text(fontPath, fontSize);
+    Text zarez = Text(fontPath, fontSize);
+    Text e = Text(fontPath, fontSize);
+    Text s2 = Text(fontPath, fontSize);
+    Text e2 = Text(fontPath, fontSize);
+    Text n = Text(fontPath, fontSize);
+    Text a3 = Text(fontPath, fontSize);
+    Text tri = Text(fontPath, fontSize);
+    Text D = Text(fontPath, fontSize);
+    Text p = Text(fontPath, fontSize);
+    Text r = Text(fontPath, fontSize);
+    Text o = Text(fontPath, fontSize);
+    Text j = Text(fontPath, fontSize);
+    Text e3 = Text(fontPath, fontSize);
+    Text k = Text(fontPath, fontSize);
+    Text t2 = Text(fontPath, fontSize);
+    Text u = Text(fontPath, fontSize);
+
+    glm::vec3 textColor(1.0f, 0.0f, 0.0f);
+
     float EntranceTextTimer = 0.0f;
 
     Entrance entrance1(0.35f, 0.4f, 0.5f, -0.1f);
@@ -280,107 +308,210 @@ int main(void)
 
         NameAndIndex.Render("Veljko Vulin RA69/2021", 0.0f, 10.0f, 1.0f, glm::vec3(0.0f, 0.5f, 0.0f));
 
-        if (entranceClicked)
+        if (entrance1.getProgress() != 1.0f && entranceClicked)
+        {
+            entranceClicked = false;
+        }
+
+        //Spaghetti code warning
+        if (entranceClicked && entrance1.getProgress() == 1.0f)
         {
             EntranceTextTimer += 0.05f;
             //Nastaviće
-            EntranceText.Render("N", 0.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+            N.Render("N", 250.0f, 500.0f, 1.0f, textColor);
+            if (EntranceTextTimer > 24.0f && N.getAlpha() > 0.0f)
+            {
+                N.reduceAlpha(0.05f);
+            }
             if (EntranceTextTimer > 1.0f)
             {
-                EntranceText.Render("a", 9.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                a.Render("a", 260.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 25.0f && a.getAlpha() > 0.0f)
+                {
+                    a.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 2.0f)
             {
-                EntranceText.Render("s", 18.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                s.Render("s", 270.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 26.0f && s.getAlpha() > 0.0f)
+                {
+                    s.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 3.0f)
             {
-                EntranceText.Render("t", 27.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                t.Render("t", 280.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 27.0f && t.getAlpha() > 0.0f)
+                {
+                    t.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 4.0f)
             {
-                EntranceText.Render("a", 36.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                a2.Render("a", 290.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 28.0f && a2.getAlpha() > 0.0f)
+                {
+                    a2.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 5.0f)
             {
-                EntranceText.Render("v", 45.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                v.Render("v", 300.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 29.0f && v.getAlpha() > 0.0f)
+                {
+                    v.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 6.0f)
             {
-                EntranceText.Render("i", 54.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                i.Render("i", 310.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 30.0f && i.getAlpha() > 0.0f)
+                {
+                    i.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 7.0f)
             {
-                EntranceText.Render("c", 63.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
-                EntranceText.Render(",", 65.0f, 509.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                c.Render("c", 320.0f, 500.0f, 1.0f, textColor);
+                zarez.Render(",", 322.0f, 511.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 31.0f && c.getAlpha() > 0.0f && zarez.getAlpha() > 0.0f)
+                {
+                    c.reduceAlpha(0.05f);
+                    zarez.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 8.0f)
             {
-                EntranceText.Render("e", 72.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                e.Render("e", 330.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 32.0f && e.getAlpha() > 0.0f)
+                {
+                    e.reduceAlpha(0.05f);
+                }
             }
 
             //se
             if (EntranceTextTimer > 9.0f)
             {
-                EntranceText.Render("s", 90.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                s2.Render("s", 350.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 33.0f && s2.getAlpha() > 0.0f)
+                {
+                    s2.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 10.0f)
             {
-                EntranceText.Render("e", 99.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                e2.Render("e", 360.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 34.0f && e2.getAlpha() > 0.0f)
+                {
+                    e2.reduceAlpha(0.05f);
+                }
             }
             //na
             if (EntranceTextTimer > 11.0f)
             {
-                EntranceText.Render("n", 117.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                n.Render("n", 380.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 35.0f && n.getAlpha() > 0.0f)
+                {
+                    n.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 12.0f)
             {
-                EntranceText.Render("a", 126.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                a3.Render("a", 390.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 36.0f && a3.getAlpha() > 0.0f)
+                {
+                    a3.reduceAlpha(0.05f);
+                }
             }
             //3D
             if (EntranceTextTimer > 13.0f)
             {
-                EntranceText.Render("3", 144.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                tri.Render("3", 410.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 37.0f && tri.getAlpha() > 0.0f)
+                {
+                    tri.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 14.0f)
             {
-                EntranceText.Render("D", 153.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                D.Render("D", 420.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 38.0f && D.getAlpha() > 0.0f)
+                {
+                    D.reduceAlpha(0.05f);
+                }
             }
             //projektu
             if (EntranceTextTimer > 15.0f)
             {
-                EntranceText.Render("p", 171.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                p.Render("p", 440.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 39.0f && p.getAlpha() > 0.0f)
+                {
+                    p.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 16.0f)
             {
-                EntranceText.Render("r", 180.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                r.Render("r", 450.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 40.0f && r.getAlpha() > 0.0f)
+                {
+                    r.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 17.0f)
             {
-                EntranceText.Render("o", 189.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                o.Render("o", 460.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 41.0f && o.getAlpha() > 0.0f)
+                {
+                    o.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 18.0f)
             {
-                EntranceText.Render("j", 198.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                j.Render("j", 470.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 42.0f && j.getAlpha() > 0.0f)
+                {
+                    j.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 19.0f)
             {
-                EntranceText.Render("e", 207.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                e3.Render("e", 480.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 43.0f && e3.getAlpha() > 0.0f)
+                {
+                    e3.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 20.0f)
             {
-                EntranceText.Render("k", 216.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                k.Render("k", 490.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 44.0f && k.getAlpha() > 0.0f)
+                {
+                    k.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 21.0f)
             {
-                EntranceText.Render("t", 225.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                t2.Render("t", 500.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 45.0f && t2.getAlpha() > 0.0f)
+                {
+                    t2.reduceAlpha(0.05f);
+                }
             }
             if (EntranceTextTimer > 22.0f)
             {
-                EntranceText.Render("u", 234.0f, 500.0f, 1.0f, glm::vec3(0.0f, 0.0f, 0.0f));
+                u.Render("u", 509.0f, 500.0f, 1.0f, textColor);
+                if (EntranceTextTimer > 46.0f && u.getAlpha() > 0.0f)
+                {
+                    u.reduceAlpha(0.05f);
+                }
             }
 
-            
+            //The exodia
+            if (EntranceTextTimer > 50.0f)
+            {
+                glfwSetWindowShouldClose(window, GL_TRUE);
+            }
         }
 
 
@@ -416,16 +547,14 @@ void renderStars() {
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods) {
     if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) {
         double xpos, ypos;
-        glfwGetCursorPos(window, &xpos, &ypos); // Get the mouse cursor position
+        glfwGetCursorPos(window, &xpos, &ypos);
 
-        // Convert the mouse coordinates to OpenGL coordinates
         int windowWidth, windowHeight;
         glfwGetWindowSize(window, &windowWidth, &windowHeight);
 
-        xpos = (xpos / windowWidth) * 2.0f - 1.0f; // Convert to OpenGL coordinates (-1 to 1 range)
-        ypos = -((ypos / windowHeight) * 2.0f - 1.0f); // Convert to OpenGL coordinates (-1 to 1 range)
+        xpos = (xpos / windowWidth) * 2.0f - 1.0f;
+        ypos = -((ypos / windowHeight) * 2.0f - 1.0f);
 
-        // Print the mouse position in OpenGL coordinates
         std::cout << "Mouse Clicked at OpenGL Coordinates: (" << xpos << ", " << ypos << ")\n";
 
 
