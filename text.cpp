@@ -32,9 +32,6 @@ Text::~Text() {
 void Text::Render(const std::string& text, GLfloat x, GLfloat y, GLfloat scale, glm::vec3 color) {
     glUseProgram(shader);
 
-    float width = 800.0f;
-    float height = 800.0f;
-
     glm::mat4 projection = glm::ortho(0.0f, 800.0f, 0.0f, 800.0f, -1.0f, 1.0f);
     GLint projLoc = glGetUniformLocation(shader, "projection");
 
